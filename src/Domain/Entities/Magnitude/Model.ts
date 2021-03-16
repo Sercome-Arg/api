@@ -11,7 +11,7 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 	constructor() {
 
-		let entity: string = 'instrument'
+		let entity: string = 'magnitude'
 
 		super({
 
@@ -19,12 +19,10 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: String,
 				typed: 'string'
 			},
-			magnitude: {
-				ref: 'magnitude',
-				typed: 'id',
-				type: Schema.Types.ObjectId,
+			unitOfMeasurement: {
+				type: String,
+				typed: 'string'
 			},
-	
 			entity: {
 				type: String,
 				typed: entity

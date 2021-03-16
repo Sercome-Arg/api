@@ -148,6 +148,10 @@ const TYPES = {
 	CompanyasdInterface: Symbol.for('CompanyasdInterface'),
   CompanyasdServiceableDomain: Symbol.for('CompanyasdServiceableDomain'),
   Companyasd: Symbol.for('Companyasd'),
+
+  MagnitudeInterface: Symbol.for('MagnitudeInterface'),
+  MagnitudeServiceableDomain: Symbol.for('MagnitudeServiceableDomain'),
+  Magnitude: Symbol.for('Magnitude'),
 };
 
 export default TYPES;

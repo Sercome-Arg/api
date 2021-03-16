@@ -9,7 +9,5 @@ import Interface from './Interface'
 export default class EntityDto extends DtoUtil implements Interface {
 
 	public name: string
-	public magnitude:  Schema.Types.ObjectId
-	
-
+	public unitOfMeasurement: string
 }

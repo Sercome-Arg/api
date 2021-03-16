@@ -271,6 +271,13 @@ import InstrumentServiceDomain from './Domain/Entities/Instrument/Controller'
 import InstrumentDto from './Domain/Entities/Instrument/Dto'
 import InstrumentServicePresentation from './Presentation/Controllers/Instrument/Controller'
 
+import MagnitudeServiceableDomain from './Domain/Entities/Magnitude/Ports/Serviceable'
+import MagnitudeInterface from './Domain/Entities/Magnitude/Interface'
+import MagnitudeModel from './Domain/Entities/Magnitude/Model'
+import MagnitudeServiceDomain from './Domain/Entities/Magnitude/Controller'
+import MagnitudeDto from './Domain/Entities/Magnitude/Dto'
+import MagnitudeServicePresentation from './Presentation/Controllers/Magnitude/Controller'
+
 var container = new Container()
 container.bind<SendeableMail>(TYPES.SendeableMail).to(SendMail)
 container.bind<Appeable>(TYPES.Appeable).to(App)
@@ -478,6 +485,12 @@ container.bind<Validable>(TYPES.Validable).to(InstrumentDto).whenTargetNamed(TYP
 container.bind<InstrumentInterface>(TYPES.InstrumentInterface).toConstantValue(new InstrumentDto)
 container.bind<InstrumentServiceableDomain>(TYPES.InstrumentServiceableDomain).to(InstrumentServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(InstrumentServicePresentation)
+
+container.bind<Schemable>(TYPES.Schemable).toConstantValue(new MagnitudeModel).whenTargetNamed(TYPES.Magnitude)
+container.bind<Validable>(TYPES.Validable).to(MagnitudeDto).whenTargetNamed(TYPES.Magnitude)
+container.bind<MagnitudeInterface>(TYPES.MagnitudeInterface).toConstantValue(new MagnitudeDto)
+container.bind<MagnitudeServiceableDomain>(TYPES.MagnitudeServiceableDomain).to(MagnitudeServiceDomain)
+container.bind<Routeable>(TYPES.Routeable).to(MagnitudeServicePresentation)
 
 
 export default container
