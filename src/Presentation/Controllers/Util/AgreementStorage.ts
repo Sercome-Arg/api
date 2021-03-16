@@ -59,7 +59,7 @@ export default class Storage implements
 			},
 			filename: function (req, file, cb) {
 
-				var name: string = moment().format('YYYY-MM-DDTHH:mm:ssZ').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+				var name: string = moment().format('YYYY-MM-DDTHH').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
 				cb(null, name)
 			}
@@ -101,7 +101,7 @@ export default class Storage implements
 			},
 			filename: function (req, file, cb) {
 
-				var name: string = moment().format('YYYY-MM-DDTHH:mm:ssZ').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+				var name: string = moment().format('YYYY-MM-DDTHH').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
 				cb(null, name)
 			}
@@ -150,7 +150,7 @@ export default class Storage implements
 			},
 			filename: function (req, file, cb) {
 
-				var name: string = moment().format('YYYY-MM-DDTHH:mm:ssZ').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+				var name: string = moment().format('YYYY-MM-DDTHH').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
 				cb(null, name)
 			}
@@ -198,7 +198,7 @@ export default class Storage implements
 			},
 			filename: function (req, file, cb) {
 
-				var name: string = moment().format('YYYY-MM-DDTHH:mm:ssZ').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+				var name: string = moment().format('YYYY-MM-DDTHH').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
 				cb(null, name)
 			}
@@ -247,7 +247,7 @@ export default class Storage implements
 			},
 			filename: function (req, file, cb) {
 
-				// var name: string = moment().format('YYYY-MM-DDTHH:mm:ssZ').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+				// var name: string = moment().format('YYYY-MM-DDTHH').toString() + '-' + file.originalname.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 				var name: string = req.params.name
 
 				cb(null, name)

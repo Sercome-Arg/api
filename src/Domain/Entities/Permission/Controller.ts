@@ -181,41 +181,19 @@ export default class Controller implements Serviceable {
 		userId: string
 	): Promise<Responseable> {
 
-		let project: {} = {}
 		let match: {} = {
 			_id: {
 				$oid: userId
 			}
 		}
-		let sort: {} = {}
-		let group: {} = {}
-		let limit: number = 1
-		let skip: 0
 
 		return new Promise<Responseable>( async (resolve, reject) => {
 
-			await this.geteableAllService.getAll(userModel, project, match, sort, group, limit, skip)
+			await this.geteableAllService.getAll(userModel, {}, match, {}, {}, 1, 0)
 				.then(async (result: Responseable) => {
 					if(result) {
-
-						let permission: any[] = []
-						let permissionUser: any[] = []
-
-						permissionUser = result.result?.rolRef?.permission || []
-
-						await Promise.all(
-							permissionUser.map(async (perm: {
-								permission: string
-							}) => {
-								await this.geteableAllService.getAll(model, {}, { _id: { $oid: perm.permission } }, {}, {}, 1, 0)
-									.then(async (result: Responseable) => {
-										permission.push(result.result)
-									})
-							})
-						)
-
 						this.responserService = {
-							result: permission,
+							result: result.result?.rolRef?.permission || [],
 							message: result.message,
 							error: result.error,
 							status: result.status

@@ -201,7 +201,7 @@ export default class Authentication implements Authenticable {
 														'Wingcamp - Recuperación de contraseña'
 													).then(res => { console.log(res) }).catch(err => { console.log(err) })
 												} else {
-													console.log('from or pass is undefined, send meil to reset pass')
+													console.log('from or pass is undefined. Not send mail, send meil to reset pass')
 												}
 		
 		
@@ -329,7 +329,7 @@ export default class Authentication implements Authenticable {
 																		'subject'
 																	).then(res => { console.log(res) }).catch(err => { console.log(err) })
 																} else {
-																	console.log('from or pass is undefined')
+																	console.log('from or pass is undefined. Not send mail')
 																}
 
 
@@ -537,7 +537,7 @@ export default class Authentication implements Authenticable {
 																		'subject'
 																	).then(res => { console.log(res) }).catch(err => { console.log(err) })
 																} else {
-																	console.log('from or pass is undefined')
+																	console.log('from or pass is undefined. Not send mail')
 																}
 
 

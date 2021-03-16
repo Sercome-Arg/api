@@ -99,11 +99,7 @@ export default class Controller implements Routeable, Patheable {
 
 	private getAllObjs = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 
-		const model: Model<Document, {}> = await this.connectionProvider.getModel(
-			'wings',
-			this.schema.name,
-			this.schema
-		)
+		const model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
 
 		let error;
 		let project = {};
@@ -181,7 +177,7 @@ export default class Controller implements Routeable, Patheable {
 
 	private saveObj = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 		
-		var model: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.schema.name, this.schema)
+		var model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
 
 		var objData: ObjInterface = request.body;
 		// const id = request.user._id

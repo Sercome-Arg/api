@@ -1,6 +1,7 @@
 import { Router, Response, NextFunction } from 'express'
 import { Model, Document } from 'mongoose'
 import { injectable, inject, named } from 'inversify';
+import * as XLSX from 'xlsx'
 
 import TYPES from './../../../TYPES';
 import container from './../../../inversify.config';
@@ -30,14 +31,7 @@ import ObjInterface from '../../../Domain/Entities/User/Interface'
 import Serviceable from '../../../Domain/Entities/User/Ports/Serviceable'
 import CompanyServiceable from '../../../Domain/Entities/Company/Ports/Serviceable'
 
-//TODO resolver esta dependencia
-import Dto from '../../../Domain/Entities/User/Dto'
-import Registrable from '../../../Domain/Entities/User/Ports/Registrable'
-import CompanyModel from './../../../Domain/Entities/Company/Model'
-import UserModel from './../../../Domain/Entities/User/Model'
-import UserService from './../../../Domain/Entities/User/Controller'
-import CompanyService from './../../../Domain/Entities/Company/Controller'
-import Storage from './../../../Presentation/Controllers/Util/AgreementStorage'
+const path = require('path');
 
 @injectable()
 export default class Controller implements Routeable, Patheable {
@@ -75,12 +69,89 @@ export default class Controller implements Routeable, Patheable {
 
 		this.router
 			.get(this.path, [this.authMid.authenticate], this.getAllObjs)
+			.get(`${this.path}/bulk/:users/:rol`, [this.authMid.authenticate], this.bulk)
 			.get(`${this.path}/schema`, [this.authMid.authenticate], this.getSchema)
 			.get(`${this.path}/:id`, [this.authMid.authenticate], this.getObjById)
 			.post('/image', [upload.single('image')], this.upload)
 			.post(this.path, [this.authMid.authenticate, validationProvider.validate(this.dto)], this.saveObj)
 			.put(`${this.path}/:id`, [this.authMid.authenticate, validationProvider.validate(this.dto, true)], this.updateObj)
 			.delete(`${this.path}/:id`, [this.authMid.authenticate], this.deleteObj);
+	}
+
+	private bulk = async (request: RequestWithUser, response: Response, next: NextFunction) => {
+
+		const users: string = request.params.users
+		const rol: string = request.params.rol
+		const database: any = request.database
+
+		var subscriptionModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.subscriptionSchema.name, this.subscriptionSchema)
+		var mailModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.mailSchema.name, this.mailSchema)
+		var companyModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.companySchema.name, this.companySchema)
+		var model: Model<Document, {}> = await this.connectionProvider.getModel(database, this.schema.name, this.schema)
+
+		try {
+
+			let workbook = XLSX.readFile(path.join(__dirname, './../../../../uploads/', users))
+			let sheet_name_list = workbook.SheetNames;
+			let wbJson = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+
+			if(wbJson.length > 0) {
+				wbJson.map((row: any) => {
+
+					let email: string = row.mail.toLowerCase()
+
+					let user: any = {
+						email: email,
+						password: 'infosanofi',
+						rol: rol
+					}
+
+					this.service.getAll(model, {} , { email: email, operationType: { $ne: 'D' } }, {}, {}, 0, 0)
+						.then((res: DomainResponseable) => {
+							if(res !== undefined && res.result !== undefined) {
+								if(Array.isArray(res.result)) {
+									if(res.result.length === 0) {
+										this.authenticationService.register(user, database, model, companyModel, mailModel, subscriptionModel)
+											.then((res: DomainResponseable) => {
+												console.log('El mail ' + email + ' fue registrado con exito');
+												
+											}).catch((err: DomainResponseable) => {
+												console.log(err)
+											})
+									} else {
+										console.log('El mail ' + email + ' ya existe')
+									}
+								}
+							}
+							
+						}).catch((err: DomainResponseable) => {
+							console.log(err)
+						})
+					
+				})
+			}
+
+			this.responserService.res = {
+				result: null,
+				message: 'asd',
+				status: 200,
+				error: 'asd'
+			}
+			 
+		} catch (e) {
+			this.responserService.res = {
+				result: null,
+				message: 'Error en la lectura del archivo. Realizar un nuevo upload',
+				status: 428,
+				error: e.toString()
+			}
+		}
+
+		if(this.responserService.res.status) {
+			response.status(this.responserService.res.status).send(this.responserService.res)
+		} else {
+			response.status(500).send(this.responserService.res)
+		}
 	}
 
 	private getSchema = async (request: RequestWithUser, response: Response, next: NextFunction) => {
@@ -218,12 +289,14 @@ export default class Controller implements Routeable, Patheable {
 	private saveObj = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 		
 		var model: Model<Document, {}> = await this.connectionProvider.getModel( request.database, this.schema.name, this.schema )
-		var companyModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.companySchema.name, this.companySchema)
-		var mailModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.mailSchema.name, this.mailSchema)
-		var subscriptionModel: Model<Document, {}> = await this.connectionProvider.getModel(database, this.subscriptionSchema.name, this.subscriptionSchema)
+		var companyModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.companySchema.name, this.companySchema)
+		var mailModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.mailSchema.name, this.mailSchema)
+		var subscriptionModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.subscriptionSchema.name, this.subscriptionSchema)
 
 		var objData: ObjInterface = request.body;
 		var database: string = request.database;
+
+		objData.password = 'infosanofi'
 
 		//TODO esto va mas abajo (revisar el register tmb, en el caso de que se baje)
 		await this.service.getAll(model, {}, { email: objData.email, operationType: { $ne: 'D' } }, {}, {}, 0, 0)

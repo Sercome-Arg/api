@@ -56,7 +56,7 @@ export default class Controller implements Routeable, Patheable {
 
 	private search = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 		
-		var model: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.schema.name, this.schema)
+		var model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
 
 		const search: string = request.params.search;
 
@@ -129,8 +129,8 @@ export default class Controller implements Routeable, Patheable {
 
 	private getAllObjs = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 
-		const model: Model<Document, {}> = await this.connectionProvider.getModel('wings',this.schema.name,this.schema)
-		const subcategoryModel: Model<Document, {}> = await this.connectionProvider.getModel('wings',this.subcategorySchema.name,this.subcategorySchema)
+		const model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME,this.schema.name,this.schema)
+		const subcategoryModel: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME,this.subcategorySchema.name,this.subcategorySchema)
 
 		let error;
 		let project = {};

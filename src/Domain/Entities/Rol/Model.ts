@@ -21,8 +21,7 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 			},
 			permission: [{
 				permission: {
-					ref: 'permission',
-					type: Schema.Types.ObjectId,
+					type: String,
 					typed: 'string'
 				}
 			}],

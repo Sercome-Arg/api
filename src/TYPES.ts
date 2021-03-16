@@ -130,28 +130,7 @@ const TYPES = {
 
   QuestionQuizInterface: Symbol.for('QuestionQuizInterface'),
   QuestionQuizServiceableDomain: Symbol.for('QuestionQuizServiceableDomain'),
-	QuestionQuiz: Symbol.for('QuestionQuiz'),
-	
-
-	InstrumentInterface: Symbol.for('InstrumentInterface'),
-  InstrumentServiceableDomain: Symbol.for('InstrumentServiceableDomain'),
-	Instrument: Symbol.for('Instrument'),
-	
-	AlertInterface: Symbol.for('AlertInterface'),
-  AlertServiceableDomain: Symbol.for('AlertServiceableDomain'),
-	Alert: Symbol.for('Alert'),
-	
-	CalibrationInterface: Symbol.for('CalibrationInterface'),
-  CalibrationServiceableDomain: Symbol.for('CalibrationServiceableDomain'),
-	Calibration: Symbol.for('Calibration'),
-	
-	CompanyasdInterface: Symbol.for('CompanyasdInterface'),
-  CompanyasdServiceableDomain: Symbol.for('CompanyasdServiceableDomain'),
-  Companyasd: Symbol.for('Companyasd'),
-
-  MagnitudeInterface: Symbol.for('MagnitudeInterface'),
-  MagnitudeServiceableDomain: Symbol.for('MagnitudeServiceableDomain'),
-  Magnitude: Symbol.for('Magnitude'),
+  QuestionQuiz: Symbol.for('QuestionQuiz'),
 };
 
 export default TYPES;

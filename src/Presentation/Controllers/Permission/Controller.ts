@@ -46,7 +46,7 @@ export default class Controller implements Routeable, Patheable {
 	initializeRoutes(validationProvider: Validateable) {
 
 		this.router
-			.get(this.path, [this.authMid.authenticate], this.getAllObjs)
+			.get(this.path, [this.authMid.authenticate], this.getBase)
 			.get(`${this.path}/base`, [this.authMid.authenticate], this.getBase)
 			.get(`${this.path}/by`, [], this.getByUser)
 			.get(`${this.path}/schema`, [this.authMid.authenticate], this.getSchema)
@@ -75,8 +75,8 @@ export default class Controller implements Routeable, Patheable {
 
 	private getByUser = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 
-		const model: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.schema.name, this.schema)
-		const userModel: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.userSchema.name, this.userSchema)
+		const model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
+		const userModel: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.userSchema.name, this.userSchema)
 
 		let recivedUser: any = ''
 

@@ -9,7 +9,6 @@ import Interface from './Interface'
 export default class EntityDto extends DtoUtil implements Interface {
 
 	public url: string
-	public name: string
-	public course: Schema.Types.ObjectId
+	public room: string
 
 }

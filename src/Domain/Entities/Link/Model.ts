@@ -19,14 +19,9 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: String,
 				typed: 'string'
 			},
-			name: {
+			room: {
 				type: String,
 				typed: 'string'
-			},
-			course: {
-				ref: 'course',
-				typed: 'id',
-				type: Schema.Types.ObjectId,
 			},
 			entity: {
 				type: String,

@@ -243,41 +243,6 @@ import QuestionQuizServiceDomain from './Domain/Entities/QuestionQuiz/Controller
 import QuestionQuizDto from './Domain/Entities/QuestionQuiz/Dto'
 import QuestionQuizServicePresentation from './Presentation/Controllers/QuestionQuiz/Controller'
 
-import AlertServiceableDomain from './Domain/Entities/Alert/Ports/Serviceable'
-import AlertInterface from './Domain/Entities/Alert/Interface'
-import AlertModel from './Domain/Entities/Alert/Model'
-import AlertServiceDomain from './Domain/Entities/Alert/Controller'
-import AlertDto from './Domain/Entities/Alert/Dto'
-import AlertServicePresentation from './Presentation/Controllers/Alert/Controller'
-
-import CalibrationServiceableDomain from './Domain/Entities/Calibration/Ports/Serviceable'
-import CalibrationInterface from './Domain/Entities/Calibration/Interface'
-import CalibrationModel from './Domain/Entities/Calibration/Model'
-import CalibrationServiceDomain from './Domain/Entities/Calibration/Controller'
-import CalibrationDto from './Domain/Entities/Calibration/Dto'
-import CalibrationServicePresentation from './Presentation/Controllers/Calibration/Controller'
-
-import CompanyasdServiceableDomain from './Domain/Entities/Companyasd/Ports/Serviceable'
-import CompanyasdInterface from './Domain/Entities/Companyasd/Interface'
-import CompanyasdModel from './Domain/Entities/Companyasd/Model'
-import CompanyasdServiceDomain from './Domain/Entities/Companyasd/Controller'
-import CompanyasdDto from './Domain/Entities/Companyasd/Dto'
-import CompanyasdServicePresentation from './Presentation/Controllers/Companyasd/Controller'
-
-import InstrumentServiceableDomain from './Domain/Entities/Instrument/Ports/Serviceable'
-import InstrumentInterface from './Domain/Entities/Instrument/Interface'
-import InstrumentModel from './Domain/Entities/Instrument/Model'
-import InstrumentServiceDomain from './Domain/Entities/Instrument/Controller'
-import InstrumentDto from './Domain/Entities/Instrument/Dto'
-import InstrumentServicePresentation from './Presentation/Controllers/Instrument/Controller'
-
-import MagnitudeServiceableDomain from './Domain/Entities/Magnitude/Ports/Serviceable'
-import MagnitudeInterface from './Domain/Entities/Magnitude/Interface'
-import MagnitudeModel from './Domain/Entities/Magnitude/Model'
-import MagnitudeServiceDomain from './Domain/Entities/Magnitude/Controller'
-import MagnitudeDto from './Domain/Entities/Magnitude/Dto'
-import MagnitudeServicePresentation from './Presentation/Controllers/Magnitude/Controller'
-
 var container = new Container()
 container.bind<SendeableMail>(TYPES.SendeableMail).to(SendMail)
 container.bind<Appeable>(TYPES.Appeable).to(App)
@@ -461,36 +426,5 @@ container.bind<Validable>(TYPES.Validable).to(QuestionQuizDto).whenTargetNamed(T
 container.bind<QuestionQuizInterface>(TYPES.QuestionQuizInterface).toConstantValue(new QuestionQuizDto)
 container.bind<QuestionQuizServiceableDomain>(TYPES.QuestionQuizServiceableDomain).to(QuestionQuizServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
-
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new AlertModel).whenTargetNamed(TYPES.Alert)
-container.bind<Validable>(TYPES.Validable).to(AlertDto).whenTargetNamed(TYPES.Alert)
-container.bind<AlertInterface>(TYPES.AlertInterface).toConstantValue(new AlertDto)
-container.bind<AlertServiceableDomain>(TYPES.AlertServiceableDomain).to(AlertServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(AlertServicePresentation)
-
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new CalibrationModel).whenTargetNamed(TYPES.Calibration)
-container.bind<Validable>(TYPES.Validable).to(CalibrationDto).whenTargetNamed(TYPES.Calibration)
-container.bind<CalibrationInterface>(TYPES.CalibrationInterface).toConstantValue(new CalibrationDto)
-container.bind<CalibrationServiceableDomain>(TYPES.CalibrationServiceableDomain).to(CalibrationServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(CalibrationServicePresentation)
-
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new CompanyasdModel).whenTargetNamed(TYPES.Companyasd)
-container.bind<Validable>(TYPES.Validable).to(CompanyasdDto).whenTargetNamed(TYPES.Companyasd)
-container.bind<CompanyasdInterface>(TYPES.CompanyasdInterface).toConstantValue(new CompanyasdDto)
-container.bind<CompanyasdServiceableDomain>(TYPES.CompanyasdServiceableDomain).to(CompanyasdServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(CompanyasdServicePresentation)
-
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new InstrumentModel).whenTargetNamed(TYPES.Instrument)
-container.bind<Validable>(TYPES.Validable).to(InstrumentDto).whenTargetNamed(TYPES.Instrument)
-container.bind<InstrumentInterface>(TYPES.InstrumentInterface).toConstantValue(new InstrumentDto)
-container.bind<InstrumentServiceableDomain>(TYPES.InstrumentServiceableDomain).to(InstrumentServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(InstrumentServicePresentation)
-
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new MagnitudeModel).whenTargetNamed(TYPES.Magnitude)
-container.bind<Validable>(TYPES.Validable).to(MagnitudeDto).whenTargetNamed(TYPES.Magnitude)
-container.bind<MagnitudeInterface>(TYPES.MagnitudeInterface).toConstantValue(new MagnitudeDto)
-container.bind<MagnitudeServiceableDomain>(TYPES.MagnitudeServiceableDomain).to(MagnitudeServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(MagnitudeServicePresentation)
-
 
 export default container

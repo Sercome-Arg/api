@@ -57,9 +57,9 @@ export default class Controller implements Routeable, Patheable {
 
 	private getByStudent = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 
-		const model: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.schema.name, this.schema)
-		const userModel: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.userSchema.name, this.userSchema)
-		const studentModel: Model<Document, {}> = await this.connectionProvider.getModel('wings', this.studentSchema.name, this.studentSchema)
+		const model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
+		const userModel: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.userSchema.name, this.userSchema)
+		const studentModel: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.studentSchema.name, this.studentSchema)
 
 		let recivedStudent: any = ''
 

@@ -148,77 +148,14 @@ export default class Controller implements Serviceable {
 
 				await this.geteableAllService.getAll(model, project, match, sort, group, limit, skip)
 					.then(async (result: Responseable) => {
-						if(result) {
-
-							if(result.result.length > 0) {
-								await Promise.all(
-									result.result.map(async (item: {
-										permission: any[],
-										subs: any[]
-									}) => {
-										let subs: any[] = []
-										if(item !== null && item.permission.length > 0) {
-											await Promise.all(
-												item.permission.map(async (permission: {
-													permission: any
-												}) => {
-													if(permission !== null) {
-														await this.geteableAllService.getAll(permissionModel, {}, { _id: { $oid: permission.permission } }, {}, {}, 1, 0)
-															.then((sub: Responseable) => {
-																subs.push(sub.result)
-															})
-													}
-												})
-											)
-										}
-										item.subs = subs
-									})
-								)
-							} else {
-								if(limit === 1) {
-									let item: {
-										permission: any[],
-										subs: any[]
-									} = result.result
-									let subs: any[] = []
-									if(item.permission.length > 0) {
-										await Promise.all(
-											item.permission.map(async (permission: {
-												permission: any
-											}) => {
-												await this.geteableAllService.getAll(permissionModel, {}, { _id: { $oid: permission.permission } }, {}, {}, 1, 0)
-													.then((sub: Responseable) => {
-														subs.push(sub.result)
-													})
-											})
-										)
-									}
-									result.result.subs = subs
-								}
-							}
-
-							this.responserService = {
-								result: result.result,
-								message: result.message,
-								error: result.error,
-								status: result.status
-							}
+						if(result !== undefined) {
+							this.responserService = { result: result.result, message: result.message, error: result.error, status: result.status }
 							resolve(this.responserService)
 						} else {
-							this.responserService = {
-								result: 'Nop',
-								message: 'No existe result',
-								error: 'obj.getAll()',
-								status: 500
-							}
+							this.responserService = { result: 'Nop', message: 'No existe result', error: 'obj.getAll()', status: 500 }
 						}
 					}).catch((err: Responseable) => {
-						this.responserService = {
-							result: err.result,
-							message: err.message,
-							error: err.error,
-							status: err.status
-						}
+						this.responserService = { result: err.result, message: err.message, error: err.error, status: err.status }
 					})
 				reject(this.responserService)
 			})

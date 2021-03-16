@@ -78,6 +78,7 @@ export default class Controller implements Controlleable {
 			}[] = []
 
 			// console.log(Object.keys(model.schema.obj))
+			// console.log(model.collection.name);
 
 			Object.keys(model.schema.obj).map(key => {
 
@@ -249,16 +250,11 @@ export default class Controller implements Controlleable {
 			if (limit > 0) queryAggregate.push({ $limit: limit });
 			if (skip > 0)	queryAggregate.push({ $skip: skip });
 
-			// queryAggregate.push({
-			// 	$lookup
-			// })
-
-			// queryAggregate.map(asd => {
-			// 	console.log(asd);
-
-			// })
-
-			queryAggregate = this.EJSON.parse(JSON.stringify(queryAggregate));
+			try {
+				queryAggregate = this.EJSON.parse(JSON.stringify(queryAggregate));
+			} catch(e) {
+				console.log(e);
+			}
 
 			if (queryAggregate.length === 0) queryAggregate.push({ $limit: 10 });
 

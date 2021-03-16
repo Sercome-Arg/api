@@ -242,17 +242,17 @@ export default class Controller implements Serviceable {
 							}
 						}
 
-						await Promise.all(
-							permissions.map(async (permission: {
-								permission: string
-								perm: {}
-							}) => {
-								await this.geteableAllService.getAll(permissionModel, {}, { _id: { $oid: permission.permission } }, {}, {}, 1, 0)
-									.then((sub: Responseable) => {
-										permission.perm = sub.result
-									})
-							})
-						)
+						// await Promise.all(
+						// 	permissions.map(async (permission: {
+						// 		permission: string
+						// 		perm: {}
+						// 	}) => {
+						// 		await this.geteableAllService.getAll(permissionModel, {}, { _id: { $oid: permission.permission } }, {}, {}, 1, 0)
+						// 			.then((sub: Responseable) => {
+						// 				permission.perm = sub.result
+						// 			})
+						// 	})
+						// )
 
 						this.responserService = {
 							result: res.result,

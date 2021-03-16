@@ -48,11 +48,48 @@ export default class Controller implements Routeable, Patheable {
 		this.router
 			.get(this.path, [this.authMid.authenticate], this.getAllObjs)
 			.get(`${this.path}/schema`, [this.authMid.authenticate], this.getSchema)
+			.post('/validate-afip/:id', [], this.validate)
 			.get(`${this.path}/:id`, [this.authMid.authenticate], this.getObjById)
 			.post(`${this.path}/process`, [this.authMid.authenticate], this.process_payment)
 			.post(this.path, [this.authMid.authenticate, validationProvider.validate(this.dto)], this.saveObj)
 			.put(`${this.path}/:id`, [this.authMid.authenticate, validationProvider.validate(this.dto, true)], this.updateObj)
 			.delete(`${this.path}/:id`, [this.authMid.authenticate], this.deleteObj);
+	}
+
+	private validate = async (request: RequestWithUser, response: Response, next: NextFunction) => {
+		// var model: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.transactionSchema.name, this.transactionSchema)
+		// var transactionTypeModel: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.transactionTypeSchema.name, this.transactionTypeSchema)
+		// var personModel: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.personSchema.name, this.personSchema)
+		// var vatConditionModel: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.vatConditionSchema.name, this.vatConditionSchema)
+		// var originModel: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.originSchema.name, this.originSchema)
+		// var companyModel: Model<Document, {}> = await this.connectionProvider.getModel('inmo', this.companySchema.name, this.companySchema)
+
+		// const id = request.user._id
+		// const id = '5e9ea6595c942a45a4c3bdde'
+		// const idTransaction: string = request.params.id
+
+		// await this.service.validate()
+		// 	.then((res: DomainResponseable) => {
+		// 		if(res && res.result !== undefined) {
+		// 			this.responserService.res = {
+		// 				result: res.result,
+		// 				message: res.message,
+		// 				status: res.status,
+		// 				error: res.error
+		// 			}
+		// 		} else {
+		// 			this.responserService.res = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
+		// 		}
+		// 	})
+		// 	.catch((err: any) => {
+		// 		this.responserService.res = { result: err.result, message: err.message, error: err.error, status: err.status }
+		// 	})
+
+		if(this.responserService.res.status) {
+			response.status(this.responserService.res.status).send(this.responserService.res)
+		} else {
+			response.status(500).send(this.responserService.res)
+		}
 	}
 
 	private process_payment = async (request: RequestWithUser, response: Response, next: NextFunction) => {
