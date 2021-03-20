@@ -131,6 +131,10 @@ const TYPES = {
   QuestionQuizInterface: Symbol.for('QuestionQuizInterface'),
   QuestionQuizServiceableDomain: Symbol.for('QuestionQuizServiceableDomain'),
   QuestionQuiz: Symbol.for('QuestionQuiz'),
+
+  MagnitudeInterface: Symbol.for('MagnitudeInterface'),
+  MagnitudeServiceableDomain: Symbol.for('MagnitudeServiceableDomain'),
+  Magnitude: Symbol.for('Magnitude'),
 };
 
 export default TYPES;

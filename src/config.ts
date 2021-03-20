@@ -7,17 +7,10 @@ var permissions = {
 	updateRol: '2.3',
 	listRol: '2.4',
 
-	createLink: '3.1',
-	deleteLink: '3.2',
-	updateLink: '3.3',
-	listLink: '3.4',
-
-	viewHome: '10.1',
-	viewAgenda: '10.2',
-	viewOneSanofi: '10.3',
-	viewGenMed: '10.4',
-	viewPasteur: '10.5',
-	viewSpecialtyCare: '10.6',
+	createMagnitude: '3.1',
+	deleteMagnitude: '3.2',
+	updateMagnitude: '3.3',
+	listMagnitude: '3.4',
 	
 };
 

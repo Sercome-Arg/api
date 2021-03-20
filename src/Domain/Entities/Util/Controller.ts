@@ -80,10 +80,11 @@ export default class Controller implements Controlleable {
 			// console.log(Object.keys(model.schema.obj))
 			// console.log(model.collection.name);
 
+		if(model !== undefined){
+			
 			Object.keys(model.schema.obj).map(key => {
 
 				Object.keys(model.schema.obj[key]).map(key2 => {
-
 					if(key2 === 'ref') {
 						refs.push({
 							ref: model.schema.obj[key],
@@ -92,8 +93,8 @@ export default class Controller implements Controlleable {
 					}
 
 				})
-
 			})
+		}
 
 			let lookups: {}[] = []
 
