@@ -1,6 +1,12 @@
-import { Container, interfaces } from "inversify";
+import { Container } from "inversify";
+import "reflect-metadata";
 import { Router } from 'express'
 import TYPES from "./TYPES";
+
+// Containers
+import EntityContainer from './Presentation/Controllers/Entity/inversify'
+import MagnitudeContainer from './Presentation/Controllers/Magnitude/inversify'
+// containerimport
 
 // Interfaces
 // Single
@@ -244,6 +250,7 @@ import QuestionQuizDto from './Domain/Entities/QuestionQuiz/Dto'
 import QuestionQuizServicePresentation from './Presentation/Controllers/QuestionQuiz/Controller'
 
 var container = new Container()
+
 container.bind<SendeableMail>(TYPES.SendeableMail).to(SendMail)
 container.bind<Appeable>(TYPES.Appeable).to(App)
 container.bind<Responseable>(TYPES.Responseable).to(Responser)
@@ -427,4 +434,8 @@ container.bind<QuestionQuizInterface>(TYPES.QuestionQuizInterface).toConstantVal
 container.bind<QuestionQuizServiceableDomain>(TYPES.QuestionQuizServiceableDomain).to(QuestionQuizServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 
-export default container
+let containerReturn = Container.merge(container, EntityContainer)
+containerReturn = Container.merge(container, MagnitudeContainer)
+// push
+
+export default containerReturn
