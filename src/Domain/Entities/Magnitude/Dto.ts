@@ -10,5 +10,5 @@ export default class EntityDto extends DtoUtil implements Interface {
 
 	public name: string
 	public unitMeasure: string
-
+	public instrument: Schema.Types.ObjectId
 }
