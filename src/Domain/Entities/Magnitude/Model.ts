@@ -7,7 +7,7 @@ import Nameable from '../Util/Ports/Nameable'
 @injectable()
 export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 	
-	public name: string
+	public unit: string
 
 	constructor() {
 
@@ -16,6 +16,10 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 		super({
 
 			name: {
+				type: String,
+				typed: 'string'
+			},
+			unit: {
 				type: String,
 				typed: 'string'
 			},

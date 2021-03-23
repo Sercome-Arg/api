@@ -11,6 +11,11 @@ var permissions = {
 	deleteMagnitude: '3.2',
 	updateMagnitude: '3.3',
 	listMagnitude: '3.4',
+
+	createInstrument: '4.1',
+	deleteInstrument: '4.2',
+	updateInstrument: '4.3',
+	listInstrument: '4.4',
 	
 };
 

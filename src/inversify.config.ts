@@ -6,6 +6,7 @@ import TYPES from "./TYPES";
 // Containers
 import EntityContainer from './Presentation/Controllers/Entity/inversify'
 import MagnitudeContainer from './Presentation/Controllers/Magnitude/inversify'
+import InstrumentContainer from './Presentation/Controllers/Instrument/inversify'
 // containerimport
 
 // Interfaces
@@ -178,13 +179,6 @@ import SubscriptionModel from './Domain/Entities/Subscription/Model'
 import SubscriptionServiceDomain from './Domain/Entities/Subscription/Controller'
 import SubscriptionDto from './Domain/Entities/Subscription/Dto'
 import SubscriptionServicePresentation from './Presentation/Controllers/Subscription/Controller'
-
-import HernanServiceableDomain from './Domain/Entities/Hernan/Ports/Serviceable'
-import HernanInterface from './Domain/Entities/Hernan/Interface'
-import HernanModel from './Domain/Entities/Hernan/Model'
-import HernanServiceDomain from './Domain/Entities/Hernan/Controller'
-import HernanDto from './Domain/Entities/Hernan/Dto'
-import HernanServicePresentation from './Presentation/Controllers/Hernan/Controller'
 
 import CourseServiceableDomain from './Domain/Entities/Course/Ports/Serviceable'
 import CourseInterface from './Domain/Entities/Course/Interface'
@@ -374,12 +368,6 @@ container.bind<SubscriptionInterface>(TYPES.SubscriptionInterface).toConstantVal
 container.bind<SubscriptionServiceableDomain>(TYPES.SubscriptionServiceableDomain).to(SubscriptionServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(SubscriptionServicePresentation)
 
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new HernanModel).whenTargetNamed(TYPES.Hernan)
-container.bind<Validable>(TYPES.Validable).to(HernanDto).whenTargetNamed(TYPES.Hernan)
-container.bind<HernanInterface>(TYPES.HernanInterface).toConstantValue(new HernanDto)
-container.bind<HernanServiceableDomain>(TYPES.HernanServiceableDomain).to(HernanServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(HernanServicePresentation)
-
 container.bind<Schemable>(TYPES.Schemable).toConstantValue(new CourseModel).whenTargetNamed(TYPES.Course)
 container.bind<Validable>(TYPES.Validable).to(CourseDto).whenTargetNamed(TYPES.Course)
 container.bind<CourseInterface>(TYPES.CourseInterface).toConstantValue(new CourseDto)
@@ -436,6 +424,7 @@ container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 
 let containerReturn = Container.merge(container, EntityContainer)
 containerReturn = Container.merge(container, MagnitudeContainer)
+containerReturn = Container.merge(container, InstrumentContainer)
 // push
 
 export default containerReturn
