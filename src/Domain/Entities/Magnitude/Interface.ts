@@ -5,7 +5,4 @@ export default interface Interface extends InterfaceUtil {
 
 	name: string
 	unitMeasure: string
-	instrument: Schema.Types.ObjectId
-	
-	
 }
