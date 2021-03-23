@@ -11,15 +11,11 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 	constructor() {
 
-		let entity: string = 'hernan'
+		let entity: string = 'instrument'
 
 		super({
 
 			name: {
-				type: String,
-				typed: 'string'
-			},
-			surname: {
 				type: String,
 				typed: 'string'
 			},

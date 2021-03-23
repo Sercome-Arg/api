@@ -1,4 +1,15 @@
-const TYPES = {
+import magnitude from './Presentation/Controllers/Magnitude/types'
+import instrument from './Presentation/Controllers/Instrument/types'
+import entity from './Presentation/Controllers/Entity/types'
+
+let returnEntities: any = {}
+function jsonConcat(o1, o2) { for (var key in o2) { o1[key] = o2[key]; }; return o1; }
+
+returnEntities = jsonConcat(returnEntities, magnitude);
+returnEntities = jsonConcat(returnEntities, instrument);
+returnEntities = jsonConcat(returnEntities, entity);
+
+var TYPES = {
 
   SendeableMail: Symbol.for('SendeableMail'),
 
@@ -137,4 +148,6 @@ const TYPES = {
   Magnitude: Symbol.for('Magnitude'),
 };
 
-export default TYPES;
+returnEntities = jsonConcat(returnEntities,TYPES);
+
+export default returnEntities;

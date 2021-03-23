@@ -3,11 +3,10 @@ import * as cookieParser from 'cookie-parser'
 import * as cors from 'cors'
 import { Express } from 'express'
 import * as express from 'express'
-import { injectable, inject, named, multiInject } from 'inversify';
+import { injectable, multiInject } from 'inversify';
 import "reflect-metadata";
 
 import TYPES from './TYPES';
-import container from './inversify.config';
 
 import Routeable from './Presentation/Controllers/Ports/Routeable'
 import Initiable from './Presentation/Ports/Initiable'

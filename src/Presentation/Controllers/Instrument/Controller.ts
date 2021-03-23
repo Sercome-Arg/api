@@ -20,22 +20,22 @@ import Validateable from '../../../Domain/Middleware/Ports/Validateable'
 import Schemable from '../../../Domain/Entities/Util/Ports/Schemable'
 import Validable from '../../../Domain/Entities/Util/Ports/Validable'
 
-import ObjInterface from '../../../Domain/Entities/Hernan/Interface'
-import Serviceable from '../../../Domain/Entities/Hernan/Ports/Serviceable'
+import ObjInterface from '../../../Domain/Entities/Instrument/Interface'
+import Serviceable from '../../../Domain/Entities/Instrument/Ports/Serviceable'
 
 @injectable()
 export default class Controller implements Routeable, Patheable {
 
 	public router: Router = container.get<Router>(TYPES.Router)
-	public path: string = '/hernan'
+	public path: string = '/instrument'
 	private validationProvider: Validateable = container.get<Validateable>(TYPES.Validateable)
 	private authMid: Authenticateable = container.get<Authenticateable>(TYPES.Authenticateable)
 	@inject(TYPES.ConnectionableProvider) private connectionProvider: ConnectionableProvider
 	@inject(TYPES.Responseable) private responserService: Responseable
 	
-	@inject(TYPES.Validable) @named(TYPES.Hernan) private dto: Validable
-	@inject(TYPES.Schemable) @named(TYPES.Hernan) private schema: Schemable
-	@inject(TYPES.HernanServiceableDomain) private service: Serviceable
+	@inject(TYPES.Validable) @named(TYPES.Instrument) private dto: Validable
+	@inject(TYPES.Schemable) @named(TYPES.Instrument) private schema: Schemable
+	@inject(TYPES.InstrumentServiceableDomain) private service: Serviceable
 
 	constructor() {
 		this.initializeRoutes(this.validationProvider);
@@ -44,10 +44,10 @@ export default class Controller implements Routeable, Patheable {
 	initializeRoutes(validationProvider: Validateable) {
 
 		this.router
-			.get(this.path, [], this.getAllObjs)
+			.get(this.path, [this.authMid.authenticate], this.getAllObjs)
 			.get(`${this.path}/schema`, [this.authMid.authenticate], this.getSchema)
 			.get(`${this.path}/:id`, [this.authMid.authenticate], this.getObjById)
-			.post(this.path, [validationProvider.validate(this.dto)], this.saveObj)
+			.post(this.path, [this.authMid.authenticate, validationProvider.validate(this.dto)], this.saveObj)
 			.put(`${this.path}/:id`, [this.authMid.authenticate, validationProvider.validate(this.dto, true)], this.updateObj)
 			.delete(`${this.path}/:id`, [this.authMid.authenticate], this.deleteObj);
 	}
@@ -99,7 +99,11 @@ export default class Controller implements Routeable, Patheable {
 
 	private getAllObjs = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 
-		const model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
+		const model: Model<Document, {}> = await this.connectionProvider.getModel(
+			request.database,
+			this.schema.name,
+			this.schema
+		)
 
 		let error;
 		let project = {};
@@ -177,11 +181,10 @@ export default class Controller implements Routeable, Patheable {
 
 	private saveObj = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 		
-		var model: Model<Document, {}> = await this.connectionProvider.getModel(process.env.DB_NAME, this.schema.name, this.schema)
+		var model: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.schema.name, this.schema)
 
 		var objData: ObjInterface = request.body;
-		// const id = request.user._id
-		const id = '5f747e8a652cd7970708d0a6'
+		const id = request.user._id
 
 		await this.service.save(objData, model, id)
 			.then((res: DomainResponseable) => {

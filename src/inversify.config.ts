@@ -1,6 +1,13 @@
-import { Container, interfaces } from "inversify";
+import { Container } from "inversify";
+import "reflect-metadata";
 import { Router } from 'express'
 import TYPES from "./TYPES";
+
+// Containers
+import EntityContainer from './Presentation/Controllers/Entity/inversify'
+import MagnitudeContainer from './Presentation/Controllers/Magnitude/inversify'
+import InstrumentContainer from './Presentation/Controllers/Instrument/inversify'
+// containerimport
 
 // Interfaces
 // Single
@@ -173,13 +180,6 @@ import SubscriptionServiceDomain from './Domain/Entities/Subscription/Controller
 import SubscriptionDto from './Domain/Entities/Subscription/Dto'
 import SubscriptionServicePresentation from './Presentation/Controllers/Subscription/Controller'
 
-import HernanServiceableDomain from './Domain/Entities/Hernan/Ports/Serviceable'
-import HernanInterface from './Domain/Entities/Hernan/Interface'
-import HernanModel from './Domain/Entities/Hernan/Model'
-import HernanServiceDomain from './Domain/Entities/Hernan/Controller'
-import HernanDto from './Domain/Entities/Hernan/Dto'
-import HernanServicePresentation from './Presentation/Controllers/Hernan/Controller'
-
 import CourseServiceableDomain from './Domain/Entities/Course/Ports/Serviceable'
 import CourseInterface from './Domain/Entities/Course/Interface'
 import CourseModel from './Domain/Entities/Course/Model'
@@ -251,6 +251,7 @@ import MagnitudeDto from './Domain/Entities/Magnitude/Dto'
 import MagnitudeServicePresentation from './Presentation/Controllers/Magnitude/Controller'
 
 var container = new Container()
+
 container.bind<SendeableMail>(TYPES.SendeableMail).to(SendMail)
 container.bind<Appeable>(TYPES.Appeable).to(App)
 container.bind<Responseable>(TYPES.Responseable).to(Responser)
@@ -374,12 +375,6 @@ container.bind<SubscriptionInterface>(TYPES.SubscriptionInterface).toConstantVal
 container.bind<SubscriptionServiceableDomain>(TYPES.SubscriptionServiceableDomain).to(SubscriptionServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(SubscriptionServicePresentation)
 
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new HernanModel).whenTargetNamed(TYPES.Hernan)
-container.bind<Validable>(TYPES.Validable).to(HernanDto).whenTargetNamed(TYPES.Hernan)
-container.bind<HernanInterface>(TYPES.HernanInterface).toConstantValue(new HernanDto)
-container.bind<HernanServiceableDomain>(TYPES.HernanServiceableDomain).to(HernanServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(HernanServicePresentation)
-
 container.bind<Schemable>(TYPES.Schemable).toConstantValue(new CourseModel).whenTargetNamed(TYPES.Course)
 container.bind<Validable>(TYPES.Validable).to(CourseDto).whenTargetNamed(TYPES.Course)
 container.bind<CourseInterface>(TYPES.CourseInterface).toConstantValue(new CourseDto)
@@ -434,6 +429,7 @@ container.bind<QuestionQuizInterface>(TYPES.QuestionQuizInterface).toConstantVal
 container.bind<QuestionQuizServiceableDomain>(TYPES.QuestionQuizServiceableDomain).to(QuestionQuizServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 
+<<<<<<< HEAD
 container.bind<Schemable>(TYPES.Schemable).toConstantValue(new MagnitudeModel).whenTargetNamed(TYPES.Magnitude)
 container.bind<Validable>(TYPES.Validable).to(MagnitudeDto).whenTargetNamed(TYPES.Magnitude)
 container.bind<MagnitudeInterface>(TYPES.MagnitudeInterface).toConstantValue(new MagnitudeDto)
@@ -441,3 +437,11 @@ container.bind<MagnitudeServiceableDomain>(TYPES.MagnitudeServiceableDomain).to(
 container.bind<Routeable>(TYPES.Routeable).to(MagnitudeServicePresentation)
 
 export default container
+=======
+let containerReturn = Container.merge(container, EntityContainer)
+containerReturn = Container.merge(container, MagnitudeContainer)
+containerReturn = Container.merge(container, InstrumentContainer)
+// push
+
+export default containerReturn
+>>>>>>> f4479a5d22f72996eca7ffb2726f351a3310c9f1
