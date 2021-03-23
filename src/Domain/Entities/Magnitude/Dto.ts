@@ -9,11 +9,5 @@ import Interface from './Interface'
 export default class EntityDto extends DtoUtil implements Interface {
 
 	public name: string
-<<<<<<< HEAD
 	public unitMeasure: string
-	public instrument: Schema.Types.ObjectId
-=======
-	public unit: string
-
->>>>>>> f4479a5d22f72996eca7ffb2726f351a3310c9f1
 }

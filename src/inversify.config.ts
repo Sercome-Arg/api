@@ -429,19 +429,9 @@ container.bind<QuestionQuizInterface>(TYPES.QuestionQuizInterface).toConstantVal
 container.bind<QuestionQuizServiceableDomain>(TYPES.QuestionQuizServiceableDomain).to(QuestionQuizServiceDomain)
 container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 
-<<<<<<< HEAD
-container.bind<Schemable>(TYPES.Schemable).toConstantValue(new MagnitudeModel).whenTargetNamed(TYPES.Magnitude)
-container.bind<Validable>(TYPES.Validable).to(MagnitudeDto).whenTargetNamed(TYPES.Magnitude)
-container.bind<MagnitudeInterface>(TYPES.MagnitudeInterface).toConstantValue(new MagnitudeDto)
-container.bind<MagnitudeServiceableDomain>(TYPES.MagnitudeServiceableDomain).to(MagnitudeServiceDomain)
-container.bind<Routeable>(TYPES.Routeable).to(MagnitudeServicePresentation)
-
-export default container
-=======
 let containerReturn = Container.merge(container, EntityContainer)
 containerReturn = Container.merge(container, MagnitudeContainer)
 containerReturn = Container.merge(container, InstrumentContainer)
 // push
 
 export default containerReturn
->>>>>>> f4479a5d22f72996eca7ffb2726f351a3310c9f1

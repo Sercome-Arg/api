@@ -11,15 +11,16 @@ var permissions = {
 	deleteMagnitude: '3.2',
 	updateMagnitude: '3.3',
 	listMagnitude: '3.4',
-<<<<<<< HEAD
-=======
-
-	createInstrument: '4.1',
-	deleteInstrument: '4.2',
-	updateInstrument: '4.3',
-	listInstrument: '4.4',
->>>>>>> f4479a5d22f72996eca7ffb2726f351a3310c9f1
 	
+	createBusiness: '4.1',
+	deleteBusiness: '4.2',
+	updateBusiness: '4.3',
+	listBusiness: '4.4',
+
+	createInstrument: '5.1',
+	deleteInstrument: '5.2',
+	updateInstrument: '5.3',
+	listInstrument: '5.4',
 };
 
 export default {
