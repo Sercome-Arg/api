@@ -146,6 +146,7 @@ var TYPES = {
   MagnitudeInterface: Symbol.for('MagnitudeInterface'),
   MagnitudeServiceableDomain: Symbol.for('MagnitudeServiceableDomain'),
   Magnitude: Symbol.for('Magnitude'),
+
 };
 
 returnEntities = jsonConcat(returnEntities,TYPES);
