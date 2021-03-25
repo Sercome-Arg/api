@@ -11,7 +11,7 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 	constructor() {
 
-		let entity: string = 'bank'
+		let entity: string = 'business'
 
 		super({
 

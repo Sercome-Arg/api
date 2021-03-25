@@ -7,6 +7,7 @@ import TYPES from "./TYPES";
 import EntityContainer from './Presentation/Controllers/Entity/inversify'
 import MagnitudeContainer from './Presentation/Controllers/Magnitude/inversify'
 import InstrumentContainer from './Presentation/Controllers/Instrument/inversify'
+import BusinessContainer from './Presentation/Controllers/Business/inversify'
 // containerimport
 
 // Interfaces
@@ -432,6 +433,7 @@ container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 let containerReturn = Container.merge(container, EntityContainer)
 containerReturn = Container.merge(container, MagnitudeContainer)
 containerReturn = Container.merge(container, InstrumentContainer)
+containerReturn = Container.merge(container, BusinessContainer)
 // push
 
 export default containerReturn

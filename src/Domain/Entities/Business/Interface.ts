@@ -11,5 +11,5 @@ export default interface Interface extends InterfaceUtil {
 	agent: string
 	process: string
 	cuit: string
-
+	
 }
