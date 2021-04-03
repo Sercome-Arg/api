@@ -9,13 +9,5 @@ import Interface from './Interface'
 export default class EntityDto extends DtoUtil implements Interface {
 
 	public name: string
-	public adress: string
-	public phone: number
-	public email: string
-	public area: string
-	public agent: string
-	public process: string
-	public cuit: string
-
 
 }

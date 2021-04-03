@@ -34,4 +34,4 @@ sed -i "s+import entity from './Presentation/Controllers/Entity/types'+import ${
 sed -i "s+returnEntities = jsonConcat(returnEntities, entity);+returnEntities = jsonConcat(returnEntities, ${nameMinus});\nreturnEntities = jsonConcat(returnEntities, entity);+g" TYPES.ts
 
 sed -i "s+// containerimport+import ${nameMayus}Container from './Presentation/Controllers/${nameMayus}/inversify'\n// containerimport+g" inversify.config.ts
-sed -i "s+// push+containerReturn = Container.merge(container, ${nameMayus}Container)\n// push+g" inversify.config.ts
+sed -i "s+// push+containerReturn = Container.merge(containerReturn, ${nameMayus}Container)\n// push+g" inversify.config.ts
