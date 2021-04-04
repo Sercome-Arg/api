@@ -4,5 +4,7 @@ import InterfaceUtil from './../Util/Ports/Dtoable'
 export default interface Interface extends InterfaceUtil {
 
 	name: string
+	symbol: string
+	magnitude: Schema.Types.ObjectId
 	
 }

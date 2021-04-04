@@ -36,6 +36,11 @@ var permissions = {
 	deleteArea: '8.2',
 	updateArea: '8.3',
 	listArea: '8.4',
+
+	createUnit: '9.1',
+	deleteUnit: '9.2',
+	updateUnit: '9.3',
+	listUnit: '9.4',
 };
 
 export default {

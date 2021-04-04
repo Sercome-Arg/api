@@ -9,5 +9,6 @@ export default interface Interface extends InterfaceUtil {
 	email: string
 	phone: string
 	CUIT: number
+	agent: Schema.Types.ObjectId
 	
 }

@@ -296,7 +296,7 @@ export default class Controller implements Routeable, Patheable {
 		var objData: ObjInterface = request.body;
 		var database: string = request.database;
 
-		objData.password = 'infosanofi'
+		objData.password = 'infosercome'
 
 		//TODO esto va mas abajo (revisar el register tmb, en el caso de que se baje)
 		await this.service.getAll(model, {}, { email: objData.email, operationType: { $ne: 'D' } }, {}, {}, 0, 0)
@@ -350,6 +350,7 @@ export default class Controller implements Routeable, Patheable {
 		const id: string = request.params.id;
 		const objData: ObjInterface = request.body;
 		const idUser: string = request.user._id;
+		delete objData.password
 		
 		await this.service.getById(id, model)
 			.then( async (res: DomainResponseable) => {
@@ -370,50 +371,6 @@ export default class Controller implements Routeable, Patheable {
 						}).catch((err: DomainResponseable) => {
 							this.responserService.res = { result: err.result, message: err.message, error: err.error, status: err.status }
 						})
-						
-					// let userById: Registrable = res.result
-					// await this.service.isMatch(objData.password, userById.password)
-					// 	.then( async (isMatch: DomainResponseable) => {
-
-					// 		if(isMatch) {
-					// 			if(isMatch.result) {
-
-					// 				await this.service.hashPassword(objData.password)
-					// 					.then( async (hash: DomainResponseable) => {
-
-					// 						if(hash) {
-
-					// 							objData.password = hash.result
-					// 							await this.service.update(id, objData, model, this.controllerService, idUser)
-					// 								.then((update: DomainResponseable) => {
-					// 									if(update) {
-					// 										this.responserService.res = {
-					// 											result: update.result,
-					// 											message: update.message,
-					// 											error: update.error,
-					// 											status: update.status
-					// 										}
-					// 									} else {
-					// 										this.responserService.res = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
-					// 									}
-					// 								}).catch((err: DomainResponseable) => {
-					// 									this.responserService.res = { result: err.result, message: err.message, error: err.error, status: err.status }
-					// 								})
-					// 						} else {
-					// 							this.responserService.res = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
-					// 						}
-					// 					}).catch((err: DomainResponseable) => {
-					// 						this.responserService.res = { result: err.result, message: err.message, error: err.error, status: err.status }
-					// 					})
-					// 			} else {
-					// 				this.responserService.res = { result: 'Nop', message: 'Contraseña incorrecta', error: 'Ingresar una contraseña válida para realizar la actualización', status: 500 }
-					// 			}
-					// 		} else {
-					// 			this.responserService.res = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
-					// 		}
-					// 	}).catch((err: DomainResponseable) => {
-					// 		this.responserService.res = { result: err.result, message: err.message, error: err.error, status: err.status }
-					// 	})
 				} else {
 					this.responserService.res = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
 				}
