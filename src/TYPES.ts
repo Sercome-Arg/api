@@ -4,6 +4,7 @@ import business from './Presentation/Controllers/Business/types'
 import certificate from './Presentation/Controllers/Certificate/types'
 import calibration from './Presentation/Controllers/Calibration/types'
 import area from './Presentation/Controllers/Area/types'
+import unit from './Presentation/Controllers/Unit/types'
 import entity from './Presentation/Controllers/Entity/types'
 
 let returnEntities: any = {}
@@ -15,6 +16,7 @@ returnEntities = jsonConcat(returnEntities, business);
 returnEntities = jsonConcat(returnEntities, certificate);
 returnEntities = jsonConcat(returnEntities, calibration);
 returnEntities = jsonConcat(returnEntities, area);
+returnEntities = jsonConcat(returnEntities, unit);
 returnEntities = jsonConcat(returnEntities, entity);
 
 var TYPES = {

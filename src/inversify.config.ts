@@ -11,6 +11,7 @@ import BusinessContainer from './Presentation/Controllers/Business/inversify'
 import CertificateContainer from './Presentation/Controllers/Certificate/inversify'
 import CalibrationContainer from './Presentation/Controllers/Calibration/inversify'
 import AreaContainer from './Presentation/Controllers/Area/inversify'
+import UnitContainer from './Presentation/Controllers/Unit/inversify'
 // containerimport
 
 // Interfaces
@@ -440,6 +441,7 @@ containerReturn = Container.merge(containerReturn, BusinessContainer)
 containerReturn = Container.merge(containerReturn, CertificateContainer)
 containerReturn = Container.merge(containerReturn, CalibrationContainer)
 containerReturn = Container.merge(containerReturn, AreaContainer)
+containerReturn = Container.merge(containerReturn, UnitContainer)
 // push
 
 export default containerReturn

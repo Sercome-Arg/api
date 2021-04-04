@@ -15,7 +15,36 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 		super({
 
+			// public name: string
+			// public ID: string
+			// public brand: string
+			// public version: string
+			// public numberOfSerie: string
+			// public business: Schema.Types.ObjectId
+			// public magnitude: Schema.Types.ObjectId
+			// public unit: Schema.Types.ObjectId
+			// public minimumWorkingRange: number
+			// public maximumWorkingRange: number
+			// public minimumMeasurementRange: number
+			// public maximumMeasurementRange: number
+
 			name: {
+				type: String,
+				typed: 'string'
+			},
+			ID: {
+				type: String,
+				typed: 'string'
+			},
+			brand: {
+				type: String,
+				typed: 'string'
+			},
+			version: {
+				type: String,
+				typed: 'string'
+			},
+			numberOfSerie: {
 				type: String,
 				typed: 'string'
 			},
@@ -28,6 +57,27 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				ref: 'magnitude',
 				typed: 'id',
 				type: Schema.Types.ObjectId,
+			},
+			unit: {
+				ref: 'unit',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			minimumWorkingRange: {
+				type: Number,
+				typed: 'number'
+			},
+			maximumWorkingRange: {
+				type: Number,
+				typed: 'number'
+			},
+			minimumMeasurementRange: {
+				type: Number,
+				typed: 'number'
+			},
+			maximumMeasurementRange: {
+				type: Number,
+				typed: 'number'
 			},
 			entity: {
 				type: String,
