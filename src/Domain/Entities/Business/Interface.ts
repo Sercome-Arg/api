@@ -4,12 +4,10 @@ import InterfaceUtil from './../Util/Ports/Dtoable'
 export default interface Interface extends InterfaceUtil {
 
 	name: string
-	adress: string
-	phone: number
+	area: Schema.Types.ObjectId
+	address: string
 	email: string
-	area: string
-	agent: string
-	process: string
-	cuit: string
+	phone: string
+	CUIT: number
 	
 }

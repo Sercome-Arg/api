@@ -21,6 +21,21 @@ var permissions = {
 	deleteInstrument: '5.2',
 	updateInstrument: '5.3',
 	listInstrument: '5.4',
+
+	createCertificate: '6.1',
+	deleteCertificate: '6.2',
+	updateCertificate: '6.3',
+	listCertificate: '6.4',
+
+	createCalibration: '7.1',
+	deleteCalibration: '7.2',
+	updateCalibration: '7.3',
+	listCalibration: '7.4',
+
+	createArea: '8.1',
+	deleteArea: '8.2',
+	updateArea: '8.3',
+	listArea: '8.4',
 };
 
 export default {

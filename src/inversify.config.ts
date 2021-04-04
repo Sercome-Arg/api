@@ -8,6 +8,9 @@ import EntityContainer from './Presentation/Controllers/Entity/inversify'
 import MagnitudeContainer from './Presentation/Controllers/Magnitude/inversify'
 import InstrumentContainer from './Presentation/Controllers/Instrument/inversify'
 import BusinessContainer from './Presentation/Controllers/Business/inversify'
+import CertificateContainer from './Presentation/Controllers/Certificate/inversify'
+import CalibrationContainer from './Presentation/Controllers/Calibration/inversify'
+import AreaContainer from './Presentation/Controllers/Area/inversify'
 // containerimport
 
 // Interfaces
@@ -431,9 +434,12 @@ container.bind<QuestionQuizServiceableDomain>(TYPES.QuestionQuizServiceableDomai
 container.bind<Routeable>(TYPES.Routeable).to(QuestionQuizServicePresentation)
 
 let containerReturn = Container.merge(container, EntityContainer)
-containerReturn = Container.merge(container, MagnitudeContainer)
-containerReturn = Container.merge(container, InstrumentContainer)
-containerReturn = Container.merge(container, BusinessContainer)
+containerReturn = Container.merge(containerReturn, MagnitudeContainer)
+containerReturn = Container.merge(containerReturn, InstrumentContainer)
+containerReturn = Container.merge(containerReturn, BusinessContainer)
+containerReturn = Container.merge(containerReturn, CertificateContainer)
+containerReturn = Container.merge(containerReturn, CalibrationContainer)
+containerReturn = Container.merge(containerReturn, AreaContainer)
 // push
 
 export default containerReturn
