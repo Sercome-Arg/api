@@ -15,9 +15,28 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 		super({
 
-			name: {
-				type: String,
-				typed: 'string'
+			calibration: {
+				ref: 'calibration',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			business: {
+				ref: 'business',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			instrument: {
+				ref: 'instrument',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			lastAlert: {
+				type: Date,
+				typed: 'date'
+			},
+			nextAlert: {
+				type: Date,
+				typed: 'date'
 			},
 			entity: {
 				type: String,

@@ -103,10 +103,6 @@ export default class Controller implements Serviceable {
 	): Promise<Responseable> {
 
 		return new Promise<Responseable>( async (resolve, reject) => {
-
-			let now: Date = new Date()
-			data.nextAlert = new Date((now.getFullYear() + 1), (now.getMonth()), (now.getDate()))
-
 			await this.saveableService.save(data, model, model, idUser)
 				.then((res: Responseable) => {
 					if(res && res.result !== undefined) {
