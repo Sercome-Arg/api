@@ -40,6 +40,11 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: Number,
 				typed: 'number'
 			},
+			agent: {
+				ref: 'user',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
 			entity: {
 				type: String,
 				typed: entity

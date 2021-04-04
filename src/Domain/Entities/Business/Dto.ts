@@ -14,5 +14,6 @@ export default class EntityDto extends DtoUtil implements Interface {
 	public email: string
 	public phone: string
 	public CUIT: number
+	public agent: Schema.Types.ObjectId
 
 }
