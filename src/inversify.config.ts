@@ -13,6 +13,7 @@ import CalibrationContainer from './Presentation/Controllers/Calibration/inversi
 import AreaContainer from './Presentation/Controllers/Area/inversify'
 import UnitContainer from './Presentation/Controllers/Unit/inversify'
 import AlertContainer from './Presentation/Controllers/Alert/inversify'
+import ConfigurationContainer from './Presentation/Controllers/Configuration/inversify'
 // containerimport
 
 // Interfaces
@@ -444,6 +445,7 @@ containerReturn = Container.merge(containerReturn, CalibrationContainer)
 containerReturn = Container.merge(containerReturn, AreaContainer)
 containerReturn = Container.merge(containerReturn, UnitContainer)
 containerReturn = Container.merge(containerReturn, AlertContainer)
+containerReturn = Container.merge(containerReturn, ConfigurationContainer)
 // push
 
 export default containerReturn

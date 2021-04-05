@@ -8,8 +8,7 @@ export default interface Saveable {
 
 	save(
 		obj: Registrable,
-		calibrationModel: Model<Document, {}>,
-		configurationModel: Model<Document, {}>,
+		model: Model<Document, {}>,
 		idUser: string
 	): Promise<Responseable>
 

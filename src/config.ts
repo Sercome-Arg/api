@@ -46,6 +46,11 @@ var permissions = {
 	deleteAlert: '10.2',
 	updateAlert: '10.3',
 	listAlert: '10.4',
+
+	createConfiguration: '11.1',
+	deleteConfiguration: '11.2',
+	updateConfiguration: '11.3',
+	listConfiguration: '11.4',
 };
 
 export default {

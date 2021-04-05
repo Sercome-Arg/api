@@ -3,9 +3,8 @@ import InterfaceUtil from './../Util/Ports/Dtoable'
 
 export default interface Interface extends InterfaceUtil {
 
-	calibration: Schema.Types.ObjectId
-	instrument: Schema.Types.ObjectId
-	business: Schema.Types.ObjectId
-
+	nextAlertYear: number
+	nextAlertMonth: number
+	nextAlertDay: number
 	
 }
