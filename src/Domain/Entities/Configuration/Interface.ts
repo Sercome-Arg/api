@@ -3,8 +3,8 @@ import InterfaceUtil from './../Util/Ports/Dtoable'
 
 export default interface Interface extends InterfaceUtil {
 
-	nextAlertYear: number
-	nextAlertMonth: number
-	nextAlertDay: number
+	beforeYear: number
+	beforeMonth: number
+	beforeDay: number
 	
 }

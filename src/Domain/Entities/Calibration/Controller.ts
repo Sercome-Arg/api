@@ -13,6 +13,7 @@ import GeteableById from '../Util/Ports/GeteableById'
 import Updateable from '../Util/Ports/Updateable'
 
 import ConfigurationInterface from './../Configuration/Interface'
+import InstrumentInterface from './../Instrument/Interface'
 
 @injectable()
 export default class Controller implements Serviceable {
@@ -102,36 +103,59 @@ export default class Controller implements Serviceable {
 		data: Registrable,
 		calibrationModel: Model<Document, {}>,
 		configurationModel: Model<Document, {}>,
+		instrumentModel: Model<Document, {}>,
 		idUser: string
 	): Promise<Responseable> {
 
 		return new Promise<Responseable>( async (resolve, reject) => {
 
-			await this.geteableAllService.getAll(configurationModel, {}, {}, {}, {}, 0, 0)
+			await this.geteableAllService.getAll(instrumentModel, {}, { _id: { $oid: data.instrument } }, {}, {}, 0, 0)
 				.then(async (res: Responseable) => {
 					if(res && res.result !== undefined) {
 						if(
 							Array.isArray(res.result) &&
 							res.result.length > 0
 						) {
-							let configuration: ConfigurationInterface = res.result[0]
+							let instrument: InstrumentInterface = res.result[0]
 
-							if(configuration.nextAlertYear === undefined || configuration.nextAlertYear === undefined) configuration.nextAlertYear = 0
-							if(configuration.nextAlertMonth === undefined || configuration.nextAlertMonth === undefined) configuration.nextAlertMonth = 0
-							if(configuration.nextAlertDay === undefined || configuration.nextAlertDay === undefined) configuration.nextAlertDay = 0
+							if(instrument.validateYear === undefined || instrument.validateYear === null) instrument.validateYear = 0
+							if(instrument.validateMonth === undefined || instrument.validateMonth === null) instrument.validateMonth = 0
+							if(instrument.validateDay === undefined || instrument.validateDay === null) instrument.validateDay = 0
 
-							let now: Date = new Date()
-							data.nextAlert = new Date(
-								(now.getFullYear() + configuration.nextAlertYear), 
-								(now.getMonth() + configuration.nextAlertMonth), 
-								(now.getDate() + configuration.nextAlertDay)
-							)
-							
-							await this.saveableService.save(data, calibrationModel, calibrationModel, idUser)
-								.then((res: Responseable) => {
+							await this.geteableAllService.getAll(configurationModel, {}, {}, {}, {}, 0, 0)
+								.then(async (res: Responseable) => {
 									if(res && res.result !== undefined) {
-										this.responserService = { result: res.result, message: res.message, error: res.error, status: res.status }
-										resolve(this.responserService)
+										if(
+											Array.isArray(res.result) &&
+											res.result.length > 0
+										) {
+											let configuration: ConfigurationInterface = res.result[0]
+
+											if(configuration.beforeYear === undefined || configuration.beforeYear === null) configuration.beforeYear = 0
+											if(configuration.beforeMonth === undefined || configuration.beforeMonth === null) configuration.beforeMonth = 0
+											if(configuration.beforeDay === undefined || configuration.beforeDay === null) configuration.beforeDay = 0
+
+											let now: Date = new Date()
+											data.nextAlert = new Date(
+												(now.getFullYear() + instrument.validateYear - configuration.beforeYear), 
+												(now.getMonth() + instrument.validateMonth - configuration.beforeMonth), 
+												(now.getDate() + instrument.validateDay - configuration.beforeDay)
+											)
+											
+											await this.saveableService.save(data, calibrationModel, calibrationModel, idUser)
+												.then((res: Responseable) => {
+													if(res && res.result !== undefined) {
+														this.responserService = { result: res.result, message: res.message, error: res.error, status: res.status }
+														resolve(this.responserService)
+													} else {
+														this.responserService = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
+														reject(this.responserService)
+													}
+												}).catch((err: Responseable) => {
+													this.responserService = { result: err.result, message: err.message, error: err.error, status: err.status }
+													reject(this.responserService)
+												})
+										}
 									} else {
 										this.responserService = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
 										reject(this.responserService)
@@ -140,6 +164,7 @@ export default class Controller implements Serviceable {
 									this.responserService = { result: err.result, message: err.message, error: err.error, status: err.status }
 									reject(this.responserService)
 								})
+
 						}
 					} else {
 						this.responserService = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }

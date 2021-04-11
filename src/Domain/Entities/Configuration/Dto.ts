@@ -8,8 +8,8 @@ import Interface from './Interface'
 @injectable()
 export default class EntityDto extends DtoUtil implements Interface {
 
-	public nextAlertYear: number
-	public nextAlertMonth: number
-	public nextAlertDay: number
+	public beforeYear: number
+	public beforeMonth: number
+	public beforeDay: number
 
 }

@@ -109,6 +109,15 @@ export default class ENTITY_SCHEMA extends Schema implements Nameable {
 				type: String,
 				typed: 'string',
 			},
+			sendAlert: {
+				type: Boolean,
+				typed: 'boolean',
+				default: false
+			},
+			process: {
+				type: String,
+				typed: 'string',
+			},
 		}, {
 			collection: 'user'
 		})

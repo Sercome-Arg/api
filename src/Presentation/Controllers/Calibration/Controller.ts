@@ -36,6 +36,7 @@ export default class Controller implements Routeable, Patheable {
 	@inject(TYPES.Validable) @named(TYPES.Calibration) private dto: Validable
 	@inject(TYPES.Schemable) @named(TYPES.Calibration) private schema: Schemable
 	@inject(TYPES.Schemable) @named(TYPES.Configuration) private configurationSchema: Schemable
+	@inject(TYPES.Schemable) @named(TYPES.Instrument) private instrumentSchema: Schemable
 	@inject(TYPES.CalibrationServiceableDomain) private service: Serviceable
 
 	constructor() {
@@ -184,11 +185,12 @@ export default class Controller implements Routeable, Patheable {
 		
 		var calibrationModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.schema.name, this.schema)
 		var configurationModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.configurationSchema.name, this.configurationSchema)
+		var instrumentModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.instrumentSchema.name, this.instrumentSchema)
 
 		var objData: ObjInterface = request.body;
 		const id = request.user._id
 
-		await this.service.save(objData, calibrationModel, configurationModel, id)
+		await this.service.save(objData, calibrationModel, configurationModel, instrumentModel, id)
 			.then((res: DomainResponseable) => {
 				if(res && res.result !== undefined) {
 					this.responserService.res = {

@@ -10,6 +10,7 @@ export default interface Saveable {
 		obj: Registrable,
 		calibrationModel: Model<Document, {}>,
 		configurationModel: Model<Document, {}>,
+		instrumentModel: Model<Document, {}>,
 		idUser: string
 	): Promise<Responseable>
 

@@ -15,5 +15,8 @@ export default interface Interface extends InterfaceUtil {
 	maximumWorkingRange: number
 	minimumMeasurementRange: number
 	maximumMeasurementRange: number
+	validateYear: number
+	validateMonth: number
+	validateDay: number
 	
 }

@@ -15,15 +15,15 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 		super({
 
-			nextAlertYear: {
+			beforeYear: {
 				type: Number,
 				typed: 'number'
 			},
-			nextAlertMonth: {
+			beforeMonth: {
 				type: Number,
 				typed: 'number'
 			},
-			nextAlertDay: {
+			beforeDay: {
 				type: Number,
 				typed: 'number'
 			},
