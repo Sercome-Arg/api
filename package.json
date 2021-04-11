@@ -48,7 +48,8 @@
 		"tslint": "^5.11.0",
 		"tslint-config-airbnb": "^5.11.1",
 		"typescript": "^3.2.1",
-		"xlsx": "^0.16.9"
+		"xlsx": "^0.16.9",
+		"nodemon": "^2.0.7"
 	},
 	"scripts": {
 		"start": "nodemon ./src/server.ts",
@@ -57,8 +58,5 @@
 		"test": "jest"
 	},
 	"author": "Marcin Wanago",
-	"license": "MIT",
-	"devDependencies": {
-		"nodemon": "^2.0.7"
-	}
+	"license": "MIT"
 }
