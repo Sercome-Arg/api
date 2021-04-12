@@ -41,6 +41,16 @@ var permissions = {
 	deleteUnit: '9.2',
 	updateUnit: '9.3',
 	listUnit: '9.4',
+
+	createAlert: '10.1',
+	deleteAlert: '10.2',
+	updateAlert: '10.3',
+	listAlert: '10.4',
+
+	createConfiguration: '11.1',
+	deleteConfiguration: '11.2',
+	updateConfiguration: '11.3',
+	listConfiguration: '11.4',
 };
 
 export default {

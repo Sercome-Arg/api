@@ -19,6 +19,24 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: String,
 				typed: 'string'
 			},
+			business: {
+				ref: 'business',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			instrument: {
+				ref: 'instrument',
+				typed: 'id',
+				type: Schema.Types.ObjectId,
+			},
+			lastAlert: {
+				type: Date,
+				typed: 'date'
+			},
+			nextAlert: {
+				type: Date,
+				typed: 'date'
+			},
 			entity: {
 				type: String,
 				typed: entity

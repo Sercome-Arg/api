@@ -20,24 +20,22 @@ import Validateable from '../../../Domain/Middleware/Ports/Validateable'
 import Schemable from '../../../Domain/Entities/Util/Ports/Schemable'
 import Validable from '../../../Domain/Entities/Util/Ports/Validable'
 
-import ObjInterface from '../../../Domain/Entities/Calibration/Interface'
-import Serviceable from '../../../Domain/Entities/Calibration/Ports/Serviceable'
+import ObjInterface from '../../../Domain/Entities/Configuration/Interface'
+import Serviceable from '../../../Domain/Entities/Configuration/Ports/Serviceable'
 
 @injectable()
 export default class Controller implements Routeable, Patheable {
 
 	public router: Router = container.get<Router>(TYPES.Router)
-	public path: string = '/calibration'
+	public path: string = '/configuration'
 	private validationProvider: Validateable = container.get<Validateable>(TYPES.Validateable)
 	private authMid: Authenticateable = container.get<Authenticateable>(TYPES.Authenticateable)
 	@inject(TYPES.ConnectionableProvider) private connectionProvider: ConnectionableProvider
 	@inject(TYPES.Responseable) private responserService: Responseable
 	
-	@inject(TYPES.Validable) @named(TYPES.Calibration) private dto: Validable
-	@inject(TYPES.Schemable) @named(TYPES.Calibration) private schema: Schemable
-	@inject(TYPES.Schemable) @named(TYPES.Configuration) private configurationSchema: Schemable
-	@inject(TYPES.Schemable) @named(TYPES.Instrument) private instrumentSchema: Schemable
-	@inject(TYPES.CalibrationServiceableDomain) private service: Serviceable
+	@inject(TYPES.Validable) @named(TYPES.Configuration) private dto: Validable
+	@inject(TYPES.Schemable) @named(TYPES.Configuration) private schema: Schemable
+	@inject(TYPES.ConfigurationServiceableDomain) private service: Serviceable
 
 	constructor() {
 		this.initializeRoutes(this.validationProvider);
@@ -183,14 +181,12 @@ export default class Controller implements Routeable, Patheable {
 
 	private saveObj = async (request: RequestWithUser, response: Response, next: NextFunction) => {
 		
-		var calibrationModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.schema.name, this.schema)
-		var configurationModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.configurationSchema.name, this.configurationSchema)
-		var instrumentModel: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.instrumentSchema.name, this.instrumentSchema)
+		var model: Model<Document, {}> = await this.connectionProvider.getModel(request.database, this.schema.name, this.schema)
 
 		var objData: ObjInterface = request.body;
 		const id = request.user._id
 
-		await this.service.save(objData, calibrationModel, configurationModel, instrumentModel, id)
+		await this.service.save(objData, model, id)
 			.then((res: DomainResponseable) => {
 				if(res && res.result !== undefined) {
 					this.responserService.res = {

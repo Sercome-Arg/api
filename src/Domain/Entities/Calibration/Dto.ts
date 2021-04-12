@@ -8,6 +8,10 @@ import Interface from './Interface'
 @injectable()
 export default class EntityDto extends DtoUtil implements Interface {
 
-	public name: string
+	public name: String
+	public instrument: Schema.Types.ObjectId
+	public business: Schema.Types.ObjectId
+	public lastAlert: Date
+	public nextAlert: Date
 
 }

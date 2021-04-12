@@ -106,16 +106,30 @@ export default class Controller implements Serviceable {
 			await this.saveableService.save(data, model, model, idUser)
 				.then((res: Responseable) => {
 					if(res && res.result !== undefined) {
-						this.responserService = { result: res.result, message: res.message, error: res.error, status: res.status }
+						this.responserService = {
+							result: res.result,
+							message: res.message,
+							error: res.error,
+							status: res.status
+						}
 						resolve(this.responserService)
 					} else {
-						this.responserService = { result: 'Nop', message: 'La capa superior contesto undefined', error: '', status: 500 }
-						reject(this.responserService)
+						this.responserService = {
+							result: 'Nop',
+							message: 'La capa superior contesto undefined',
+							error: '',
+							status: 500
+						}
 					}
 				}).catch((err: Responseable) => {
-					this.responserService = { result: err.result, message: err.message, error: err.error, status: err.status }
-					reject(this.responserService)
+					this.responserService = {
+						result: err.result,
+						message: err.message,
+						error: err.error,
+						status: err.status
+					}
 				})
+			reject(this.responserService)
 		})
 	}
 

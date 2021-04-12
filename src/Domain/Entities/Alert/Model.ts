@@ -11,26 +11,14 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 
 	constructor() {
 
-		let entity: string = 'certificate'
+		let entity: string = 'alert'
 
 		super({
 
-			calibration: {
-				ref: 'calibration',
-				typed: 'id',
-				type: Schema.Types.ObjectId,
+			message: {
+				type: String,
+				typed: 'string'
 			},
-			business: {
-				ref: 'business',
-				typed: 'id',
-				type: Schema.Types.ObjectId,
-			},
-			instrument: {
-				ref: 'instrument',
-				typed: 'id',
-				type: Schema.Types.ObjectId,
-			},
-
 			entity: {
 				type: String,
 				typed: entity

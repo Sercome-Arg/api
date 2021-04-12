@@ -26,5 +26,7 @@ export default interface Interface extends InterfaceUtil, Registrable, Enableabl
 	mailVerified: boolean
 	idMail: string
 	survey: string
+	sendAlert: boolean
+	process: string
 
 }

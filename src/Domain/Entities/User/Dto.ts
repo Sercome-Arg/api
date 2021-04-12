@@ -64,5 +64,7 @@ export default class EntityDto extends DtoUtil implements Interface {
 	public mailVerified: boolean
 	public idMail: string
 	public survey: string
+	public sendAlert: boolean
+	public process: string
 
 }

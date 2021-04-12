@@ -20,5 +20,8 @@ export default class EntityDto extends DtoUtil implements Interface {
 	public maximumWorkingRange: number
 	public minimumMeasurementRange: number
 	public maximumMeasurementRange: number
+	public validateYear: number
+	public validateMonth: number
+	public validateDay: number
 
 }

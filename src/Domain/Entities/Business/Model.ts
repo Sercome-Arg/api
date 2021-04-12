@@ -28,10 +28,6 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: String,
 				typed: 'string'
 			},
-			email: {
-				type: String,
-				typed: 'string'
-			},
 			phone: {
 				type: String,
 				typed: 'string'
