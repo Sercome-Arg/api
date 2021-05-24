@@ -12,7 +12,7 @@ export default class EntityDto extends DtoUtil implements Interface {
 	public ID: string
 	public brand: string
 	public version: string
-	public numberOfSerie: string
+	public numberOfSerie: string 
 	public business: Schema.Types.ObjectId
 	public magnitude: Schema.Types.ObjectId
 	public unit: Schema.Types.ObjectId
