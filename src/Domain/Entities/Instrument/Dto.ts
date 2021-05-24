@@ -16,10 +16,10 @@ export default class EntityDto extends DtoUtil implements Interface {
 	public business: Schema.Types.ObjectId
 	public magnitude: Schema.Types.ObjectId
 	public unit: Schema.Types.ObjectId
-	public minimumWorkingRange: number
-	public maximumWorkingRange: number
-	public minimumMeasurementRange: number
-	public maximumMeasurementRange: number
+	public minimumWorkingRange: string
+	public maximumWorkingRange: string
+	public minimumMeasurementRange: string
+	public maximumMeasurementRange: string
 	public validateYear: number
 	public validateMonth: number
 	public validateDay: number

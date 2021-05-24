@@ -11,10 +11,10 @@ export default interface Interface extends InterfaceUtil {
 	business: Schema.Types.ObjectId
 	magnitude: Schema.Types.ObjectId
 	unit: Schema.Types.ObjectId
-	minimumWorkingRange: number
-	maximumWorkingRange: number
-	minimumMeasurementRange: number
-	maximumMeasurementRange: number
+	minimumWorkingRange: string
+	maximumWorkingRange: string
+	minimumMeasurementRange: string
+	maximumMeasurementRange: string
 	validateYear: number
 	validateMonth: number
 	validateDay: number

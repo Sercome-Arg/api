@@ -64,20 +64,20 @@ export default class ENTITY_SCHEMA extends Schemable implements Nameable {
 				type: Schema.Types.ObjectId,
 			},
 			minimumWorkingRange: {
-				type: Number,
-				typed: 'number'
+				type: String,
+				typed: 'string'
 			},
 			maximumWorkingRange: {
-				type: Number,
-				typed: 'number'
+				type: String,
+				typed: 'string'
 			},
 			minimumMeasurementRange: {
-				type: Number,
-				typed: 'number'
+				type: String,
+				typed: 'string'
 			},
 			maximumMeasurementRange: {
-				type: Number,
-				typed: 'number'
+				type: String,
+				typed: 'string'
 			},
 			validateYear: {
 				type: Number,
