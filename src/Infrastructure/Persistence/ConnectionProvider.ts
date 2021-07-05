@@ -43,16 +43,22 @@ export default class ConnectionProvider implements ConnectionableProvider {
 		}
 	}
 	
-	public getConnection(database: string) {
+	public getConnection(database?: string): DBConnection {
 		
 		let connection = null;
 		
 		if (ConnectionProvider.connections.length > 0) {
-			for (const c of ConnectionProvider.connections) {
-				if (c.database === database) connection = c.connection
+			if(database === undefined) {
+				connection = ConnectionProvider.connections[0]
+			} else {
+				for (const c of ConnectionProvider.connections) {
+					if (c.database === database) connection = c.connection
+				}
 			}
+		} else {
+			this.connect(process.env.DB)
 		}
-		
+
 		return connection;
 	}
 	

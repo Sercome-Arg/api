@@ -1,6 +1,10 @@
 import { Model, Document, Types } from 'mongoose'
 import { injectable } from 'inversify';
 import * as moment from 'moment'
+
+import ConnectionableProvider from './../../../Infrastructure/Persistence/Ports/ConnectionableProvider';
+import ConnectionProvider from './../../../Infrastructure/Persistence/ConnectionProvider';
+
 import Controlleable from './Ports/Controlleable'
 import Dtoable from './Ports/Dtoable'
 import TablesRelations from './TablesRelations'
@@ -14,10 +18,12 @@ export default class Controller implements Controlleable {
 	public BSON: any = require('bson');
 	public EJSON: any;
 	private responserService: Responseable
+	private connectionProvider: ConnectionableProvider
 
 	constructor() {
 		this.EJSON = this.BSON.EJSON;
 		this.responserService = new Responser()
+		this.connectionProvider = new ConnectionProvider()
 	}
 
 	public async search(
@@ -60,215 +66,59 @@ export default class Controller implements Controlleable {
 
 	public async getAll(
 		model: Model<Document, {}>,
-		project: {} = {},
-		match: {} = {},
-		sort: {} = {},
-		group: {} = {},
-		limit: number = 0,
-		skip: number = 0
+		project = {},
+		match = {},
+		sort = {},
+		group = {},
+		limit = 0,
+		skip = 0,
 	): Promise<Responseable> {
+		return new Promise<Responseable>(async (resolve, reject) => {
 
-		return new Promise<Responseable>( async (resolve, reject) => {
-
-			let queryAggregate = [];
-
-			let refs: {
-				ref: {},
-				name: string
-			}[] = []
-
-			// console.log(Object.keys(model.schema.obj))
-			// console.log(model.collection.name);
-
-		if(model !== undefined){
-			
-			Object.keys(model.schema.obj).map(key => {
-
-				Object.keys(model.schema.obj[key]).map(key2 => {
-					if(key2 === 'ref') {
-						refs.push({
-							ref: model.schema.obj[key],
-							name: key
-						})
-					}
-
-				})
-			})
-		}
-
-			let lookups: {}[] = []
-
-			refs.map((item: {
-				ref: {
-					ref: string
-				},
-				name: string
-			}) => {
-				lookups.push({
-					look: {
-						from: item.ref.ref,
-						localField: item.name,
-						foreignField: "_id",
-						as: item.name + 'Ref'
-					},
-					unwin: {
-						path: '$' + item.name + 'Ref',
-						preserveNullAndEmptyArrays: true
-					}
-				})
-			})
+			let queryAggregate: any = [];
+			const connection: any = this.connectionProvider.getConnection(process.env.DB_NAME)
 
 			if (Object.keys(project).length > 0) {
 
-				var relations = new TablesRelations()
-				var propertyExist: boolean = false
-				var guaranteePropertyExist: boolean = false
-				var guaranteePersonExist: boolean = false
-				var servicesExist: boolean = false
-				var pricingExist: boolean = false
-				var roomsExist: boolean = false
+				this.getLookups(queryAggregate, project, connection, model);
 
-				Object.keys(project).map((key: string) => {
-					if(key.includes('property')) {
-						if(key.includes('property.')) {
-							if (relations.exist(key)) {
-								queryAggregate.push({ $lookup: { from: relations.getRelations(key).table, foreignField: '_id', localField: relations.getRelations(key).localField, as: relations.getRelations(key).localField } });
-								queryAggregate.push({ $unwind: { path: '$' + relations.getRelations(key).localField, preserveNullAndEmptyArrays: true } });
-							}
-						} else {
-							delete project[key]
-							propertyExist = true
-						}
-					} else {
-						if (key.includes('guaranteeProperty')) {
-							delete project[key]
-							guaranteePropertyExist = true
-						} else {
-							if (key.includes('guaranteePerson')) {
-								delete project[key]
-								guaranteePersonExist = true
-							} else {
-								if (key.includes('services')) {
-									delete project[key]
-									servicesExist = true
-								} else {
-									if (key.includes('pricing')) {
-										delete project[key]
-										pricingExist = true
-									} else {
-										if (key.includes('rooms')) {
-											delete project[key]
-											roomsExist = true
-										} else {
-											if (relations.exist(key)) {
-												queryAggregate.push({ $lookup: { from: relations.getRelations(key).table, foreignField: '_id', localField: relations.getRelations(key).localField, as: relations.getRelations(key).localField } });
-												queryAggregate.push({ $unwind: { path: '$' + relations.getRelations(key).localField, preserveNullAndEmptyArrays: true } });
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				})
-
-				if(propertyExist) {
-					project = {
-						...project,
-						property: 1,
-						properties: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('property').table, foreignField: '_id', localField: relations.getRelations('property').localField, as: 'properties' } });
-				}
-
-				if(guaranteePropertyExist) {
-					project = {
-						...project,
-						guaranteeProperty: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('guaranteeProperty').table, foreignField: '_id', localField: relations.getRelations('guaranteeProperty').localField, as: 'guaranteeProperty' } });
-				}
-
-				if(guaranteePersonExist) {
-					project = {
-						...project,
-						guaranteePerson: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('guaranteePerson').table, foreignField: '_id', localField: relations.getRelations('guaranteePerson').localField, as: 'guaranteePerson' } });
-				}
-
-				if(servicesExist) {
-					project = {
-						...project,
-						services: 1,
-						servicesAux: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('service').table, foreignField: '_id', localField: relations.getRelations('service').localField, as: 'servicesAux' } });
-				}
-
-				if(pricingExist) {
-					project = {
-						...project,
-						pricing: 1,
-						pricingAux: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('pricing').table, foreignField: '_id', localField: relations.getRelations('pricing').localField, as: 'pricingAux' } });
-				}
-
-				if(pricingExist) {
-					project = {
-						...project,
-						rooms: 1,
-						roomsAux: 1
-					}
-					queryAggregate.push({ $lookup: { from: relations.getRelations('rooms').table, foreignField: '_id', localField: 'rooms.type', as: 'roomsAux' } });
-				}
-				
 				if (Object.keys(sort).length > 0) queryAggregate.push({ $sort: sort });
-
-				
 
 				queryAggregate.push({ $project: project });
 			} else {
 				if (Object.keys(sort).length > 0) queryAggregate.push({ $sort: sort });
 			}
 
-			lookups.map((look: {
-				look: {},
-				unwin: {}
-			}) => {
-				queryAggregate.push({
-					$lookup: look.look
-				})
-				queryAggregate.push({
-					$unwind: look.unwin
-				})
-			})
-
 			if (Object.keys(match).length > 0) queryAggregate.push({ $match: match });
 			if (Object.keys(group).length > 0) queryAggregate.push({ $group: group });
 
-			if (limit > 0) queryAggregate.push({ $limit: limit });
-			if (skip > 0)	queryAggregate.push({ $skip: skip });
-
-			try {
-				queryAggregate = this.EJSON.parse(JSON.stringify(queryAggregate));
-			} catch(e) {
-				console.log(e);
+			if (limit > 0) {
+				if (Object.keys(group).length > 0) {
+					let projectGroup = `{ "items": { "$slice": ["$items", ${skip}, ${limit}] }`;
+					for (const prop of Object.keys(group)) {
+						if (prop !== 'items') {
+							projectGroup += `, "${prop}": 1`;
+						}
+					}
+					projectGroup += '}';
+					queryAggregate.push({ $project: JSON.parse(projectGroup) });
+				} else {
+					queryAggregate.push({ $limit: limit });
+					queryAggregate.push({ $skip: skip });
+				}
 			}
 
+			queryAggregate = this.EJSON.parse(JSON.stringify(queryAggregate));
+			
 			if (queryAggregate.length === 0) queryAggregate.push({ $limit: 10 });
 
 			if(model !== undefined) {
 				await model.aggregate(queryAggregate)
 					.then(async (result: any) => {
 
-						// model.populate([], {})
+						// console.log(result);
+						// console.log(model.collection.name);
 
-
-						// model.createIndexes
-
-						
 						if(result.length === 0) {
 							if(limit === 1) {
 								this.responserService = { result: {}, message: 'Consulta exitosa', error: '', status: 200 }
@@ -282,18 +132,340 @@ export default class Controller implements Controlleable {
 								this.responserService = { result: result, message: 'Consulta exitosa', error: '', status: 200 }
 							}
 						}
-						//console.log(result)
 						resolve(this.responserService)
 					}).catch((err: any) => {
 						this.responserService = { result: 'Nop', message: 'No se pudo realizar la consulta', error: err, status: 500 }
 						reject(this.responserService)
 					});
 			} else {
+				// console.log(project)
+				// console.log(match)
+				// console.log(sort)
+				// console.log(group)
+				// console.log(limit)
+				// console.log(skip)
 				this.responserService = { result: 'Nop', message: 'No se pudo realizar la consulta', error: 'Some /entities/util/getAll/return/if(model)', status: 500 }
 				reject(this.responserService)
 			}
 		});
 	}
+
+	private getLookups(queryAggregate: any, project: {}, connection: any, model: any): [] {
+		// RELACIÓN PRIMER NIVEL
+		let schemaLvl1 = model.schema;
+		for (let keyLvl1 of Object.keys(schemaLvl1.paths)) {
+			if (schemaLvl1.paths[keyLvl1].instance === 'ObjectID' && schemaLvl1.paths[keyLvl1].options.ref) { // BUSCAMOS RELACIÓN UNO A UNO
+				if (this.searchPropertyOfArray(project, `${keyLvl1}.`) || this.searchPropertyOfArray(project, `${keyLvl1}_`)) {
+					queryAggregate.push({ $lookup: { from: schemaLvl1.paths[keyLvl1].options.ref, foreignField: '_id', localField: keyLvl1, as: keyLvl1 } });
+					queryAggregate.push({ $unwind: { path: `$${keyLvl1}`, preserveNullAndEmptyArrays: true } });
+					// RELACIÓN SIGUIENTE NIVEL
+					this.getNextLvl(queryAggregate, project, schemaLvl1, schemaLvl1.paths[keyLvl1].options.ref, keyLvl1, keyLvl1, connection, model);
+				}
+			} else if (schemaLvl1.paths[keyLvl1].instance === 'Array' && schemaLvl1.paths[keyLvl1].schemaOptions.id && schemaLvl1.paths[keyLvl1].options.type[0].ref) { // BUSCAMOS ARRAY DE ID
+				if (this.searchPropertyOfArray(project, `${keyLvl1}.`) || this.searchPropertyOfArray(project, `${keyLvl1}_`)) {
+					queryAggregate.push({ $lookup: { from: schemaLvl1.paths[keyLvl1].options.type[0].ref, foreignField: '_id', localField: keyLvl1, as: keyLvl1 } });
+					// RELACIÓN SIGUIENTE NIVEL
+					this.getNextLvl(queryAggregate, project, schemaLvl1, schemaLvl1.paths[keyLvl1].options.type[0].ref, keyLvl1, keyLvl1, connection, model);
+				}
+			} else if (schemaLvl1.paths[keyLvl1].instance === 'Array' && !schemaLvl1.paths[keyLvl1].schemaOptions.id) { // BUSCAMOS OBJETO DENTRO DEL ARRAY
+				for (let attr of Object.keys(schemaLvl1.paths[keyLvl1].options.type[0])) {
+					if (schemaLvl1.paths[keyLvl1].options.type[0][attr].ref) {
+						if (this.searchPropertyOfArray(project, `${keyLvl1}.${attr}.`) || this.searchPropertyOfArray(project, `${keyLvl1}.${attr}_`)) {
+							queryAggregate.push({ $lookup: { from: schemaLvl1.paths[keyLvl1].options.type[0][attr].ref, foreignField: '_id', localField: `${keyLvl1}.${attr}`, as: `${keyLvl1}.${attr}` } });
+							// RELACIÓN SIGUIENTE NIVEL
+							this.getNextLvl(queryAggregate, project, schemaLvl1, schemaLvl1.paths[keyLvl1].options.type[0][attr].ref, keyLvl1, keyLvl1, connection, model);
+						}
+					}
+				}
+			}
+		}
+		return;
+	}
+
+	getNextLvl(queryAggregate: any, project: {}, schemaLastLvl: any, ref: string, lastKey: string, keyNew: string, connection: any, model: any): [] {
+		let countRelations: number = 0;
+		if (schemaLastLvl.paths[keyNew]) {
+			let schemaLvl = model.schema;
+			for (let key of Object.keys(schemaLvl.paths)) {
+				if (schemaLvl.paths[key].instance === 'ObjectID' && schemaLvl.paths[key].options.ref) {
+					if (this.searchPropertyOfArray(project, `${lastKey}.${key}.`)) {
+						queryAggregate.push({ $lookup: { from: schemaLvl.paths[key].options.ref, foreignField: '_id', localField: `${lastKey}.${key}`, as: `${lastKey}.${key}` } });
+						queryAggregate.push({ $unwind: { path: `$${`${lastKey}.${key}`}`, preserveNullAndEmptyArrays: true } });
+
+						// RELACIÓN SIGUIENTE NIVEL
+						countRelations++;
+						this.getNextLvl(queryAggregate, project, schemaLvl, schemaLvl.paths[key].options.ref, `${lastKey}.${key}`, key, connection, model);
+					}
+				} else if (schemaLvl.paths[key].instance === 'Array' && schemaLvl.paths[key].schemaOptions.id && schemaLvl.paths[key].options.type[0].ref) { // BUSCAMOS ARRAY DE ID
+					if (this.searchPropertyOfArray(project, `${lastKey}.${key}.`) || this.searchPropertyOfArray(project, `${lastKey}.${key}_`)) {
+						queryAggregate.push({ $lookup: { from: schemaLvl.paths[key].options.type[0].ref, foreignField: '_id', localField: `${lastKey}.${key}`, as: `${lastKey}.${key}` } });
+
+						// RELACIÓN SIGUIENTE NIVEL
+						countRelations++;
+						this.getNextLvl(queryAggregate, project, schemaLvl, schemaLvl.paths[key].options.ref, `${lastKey}.${key}`, key, connection, model);
+					}
+				} else if (schemaLvl.paths[key].instance === 'Array' && !schemaLvl.paths[key].schemaOptions.id) { // BUSCAMOS OBJETO DENTRO DEL ARRAY
+					for (let attr of Object.keys(schemaLvl.paths[`${key}`].options.type[0])) {
+						if (schemaLvl.paths[`${key}`].options.type[0][attr].ref) {
+							if (this.searchPropertyOfArray(project, `${lastKey}.${key}.${attr}.`) || this.searchPropertyOfArray(project, `${lastKey}.${key}.${attr}_`)) {
+								queryAggregate.push({ $lookup: { from: schemaLvl.paths[`${key}`].options.type[0][attr].ref, foreignField: '_id', localField: `${lastKey}.${key}.${attr}`, as: `${lastKey}.${key}.${attr}` } });
+
+								// RELACIÓN SIGUIENTE NIVEL
+								countRelations++;
+								this.getNextLvl(queryAggregate, project, schemaLvl, schemaLvl.paths[key].options.ref, `${lastKey}.${key}`, key, connection, model);
+							}
+						}
+					}
+				}
+			}
+		}
+		if (countRelations === 0) {
+			return;
+		}
+	}
+
+	searchPropertyOfArray(json: {}, value: string): boolean {
+		let n = false;
+		for (const a of Object.keys(json)) { if (!n) n = a.includes(value); }
+		return n;
+	}
+
+	// public async getAll(
+	// 	model: Model<Document, {}>,
+	// 	project: {} = {},
+	// 	match: {} = {},
+	// 	sort: {} = {},
+	// 	group: {} = {},
+	// 	limit: number = 0,
+	// 	skip: number = 0
+	// ): Promise<Responseable> {
+
+	// 	return new Promise<Responseable>( async (resolve, reject) => {
+
+	// 		let queryAggregate = [];
+
+	// 		let refs: {
+	// 			ref: {},
+	// 			name: string
+	// 		}[] = []
+
+	// 		// console.log(Object.keys(model.schema.obj))
+	// 		// console.log(model.collection.name);
+
+	// 	if(model !== undefined){
+			
+	// 		Object.keys(model.schema.obj).map(key => {
+
+	// 			Object.keys(model.schema.obj[key]).map(key2 => {
+	// 				if(key2 === 'ref') {
+	// 					refs.push({
+	// 						ref: model.schema.obj[key],
+	// 						name: key
+	// 					})
+	// 				}
+
+	// 			})
+	// 		})
+	// 	}
+
+	// 		let lookups: {}[] = []
+
+	// 		refs.map((item: {
+	// 			ref: {
+	// 				ref: string
+	// 			},
+	// 			name: string
+	// 		}) => {
+	// 			lookups.push({
+	// 				look: {
+	// 					from: item.ref.ref,
+	// 					localField: item.name,
+	// 					foreignField: "_id",
+	// 					as: item.name + 'Ref'
+	// 				},
+	// 				unwin: {
+	// 					path: '$' + item.name + 'Ref',
+	// 					preserveNullAndEmptyArrays: true
+	// 				}
+	// 			})
+	// 		})
+
+	// 		if (Object.keys(project).length > 0) {
+
+	// 			var relations = new TablesRelations()
+	// 			var propertyExist: boolean = false
+	// 			var guaranteePropertyExist: boolean = false
+	// 			var guaranteePersonExist: boolean = false
+	// 			var servicesExist: boolean = false
+	// 			var pricingExist: boolean = false
+	// 			var roomsExist: boolean = false
+
+	// 			Object.keys(project).map((key: string) => {
+	// 				if(key.includes('property')) {
+	// 					if(key.includes('property.')) {
+	// 						if (relations.exist(key)) {
+	// 							queryAggregate.push({ $lookup: { from: relations.getRelations(key).table, foreignField: '_id', localField: relations.getRelations(key).localField, as: relations.getRelations(key).localField } });
+	// 							queryAggregate.push({ $unwind: { path: '$' + relations.getRelations(key).localField, preserveNullAndEmptyArrays: true } });
+	// 						}
+	// 					} else {
+	// 						delete project[key]
+	// 						propertyExist = true
+	// 					}
+	// 				} else {
+	// 					if (key.includes('guaranteeProperty')) {
+	// 						delete project[key]
+	// 						guaranteePropertyExist = true
+	// 					} else {
+	// 						if (key.includes('guaranteePerson')) {
+	// 							delete project[key]
+	// 							guaranteePersonExist = true
+	// 						} else {
+	// 							if (key.includes('services')) {
+	// 								delete project[key]
+	// 								servicesExist = true
+	// 							} else {
+	// 								if (key.includes('pricing')) {
+	// 									delete project[key]
+	// 									pricingExist = true
+	// 								} else {
+	// 									if (key.includes('rooms')) {
+	// 										delete project[key]
+	// 										roomsExist = true
+	// 									} else {
+	// 										if (relations.exist(key)) {
+	// 											queryAggregate.push({ $lookup: { from: relations.getRelations(key).table, foreignField: '_id', localField: relations.getRelations(key).localField, as: relations.getRelations(key).localField } });
+	// 											queryAggregate.push({ $unwind: { path: '$' + relations.getRelations(key).localField, preserveNullAndEmptyArrays: true } });
+	// 										}
+	// 									}
+	// 								}
+	// 							}
+	// 						}
+	// 					}
+	// 				}
+	// 			})
+
+	// 			if(propertyExist) {
+	// 				project = {
+	// 					...project,
+	// 					property: 1,
+	// 					properties: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('property').table, foreignField: '_id', localField: relations.getRelations('property').localField, as: 'properties' } });
+	// 			}
+
+	// 			if(guaranteePropertyExist) {
+	// 				project = {
+	// 					...project,
+	// 					guaranteeProperty: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('guaranteeProperty').table, foreignField: '_id', localField: relations.getRelations('guaranteeProperty').localField, as: 'guaranteeProperty' } });
+	// 			}
+
+	// 			if(guaranteePersonExist) {
+	// 				project = {
+	// 					...project,
+	// 					guaranteePerson: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('guaranteePerson').table, foreignField: '_id', localField: relations.getRelations('guaranteePerson').localField, as: 'guaranteePerson' } });
+	// 			}
+
+	// 			if(servicesExist) {
+	// 				project = {
+	// 					...project,
+	// 					services: 1,
+	// 					servicesAux: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('service').table, foreignField: '_id', localField: relations.getRelations('service').localField, as: 'servicesAux' } });
+	// 			}
+
+	// 			if(pricingExist) {
+	// 				project = {
+	// 					...project,
+	// 					pricing: 1,
+	// 					pricingAux: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('pricing').table, foreignField: '_id', localField: relations.getRelations('pricing').localField, as: 'pricingAux' } });
+	// 			}
+
+	// 			if(pricingExist) {
+	// 				project = {
+	// 					...project,
+	// 					rooms: 1,
+	// 					roomsAux: 1
+	// 				}
+	// 				queryAggregate.push({ $lookup: { from: relations.getRelations('rooms').table, foreignField: '_id', localField: 'rooms.type', as: 'roomsAux' } });
+	// 			}
+				
+	// 			if (Object.keys(sort).length > 0) queryAggregate.push({ $sort: sort });
+
+				
+
+	// 			queryAggregate.push({ $project: project });
+	// 		} else {
+	// 			if (Object.keys(sort).length > 0) queryAggregate.push({ $sort: sort });
+	// 		}
+
+	// 		lookups.map((look: {
+	// 			look: {},
+	// 			unwin: {}
+	// 		}) => {
+	// 			queryAggregate.push({
+	// 				$lookup: look.look
+	// 			})
+	// 			queryAggregate.push({
+	// 				$unwind: look.unwin
+	// 			})
+	// 		})
+
+	// 		if (Object.keys(match).length > 0) queryAggregate.push({ $match: match });
+	// 		if (Object.keys(group).length > 0) queryAggregate.push({ $group: group });
+
+	// 		if (limit > 0) queryAggregate.push({ $limit: limit });
+	// 		if (skip > 0)	queryAggregate.push({ $skip: skip });
+
+	// 		try {
+	// 			queryAggregate = this.EJSON.parse(JSON.stringify(queryAggregate));
+	// 		} catch(e) {
+	// 			console.log(e);
+	// 		}
+
+	// 		if (queryAggregate.length === 0) queryAggregate.push({ $limit: 10 });
+
+	// 		if(model !== undefined) {
+	// 			await model.aggregate(queryAggregate)
+	// 				.then(async (result: any) => {
+
+	// 					// model.populate([], {})
+
+
+	// 					// model.createIndexes
+
+						
+	// 					if(result.length === 0) {
+	// 						if(limit === 1) {
+	// 							this.responserService = { result: {}, message: 'Consulta exitosa', error: '', status: 200 }
+	// 						} else {
+	// 							this.responserService = { result: [], message: 'Consulta exitosa', error: '', status: 200 }
+	// 						}
+	// 					} else {
+	// 						if(limit === 1) {
+	// 							this.responserService = { result: result[0], message: 'Consulta exitosa', error: '', status: 200 }
+	// 						} else {
+	// 							this.responserService = { result: result, message: 'Consulta exitosa', error: '', status: 200 }
+	// 						}
+	// 					}
+	// 					//console.log(result)
+	// 					resolve(this.responserService)
+	// 				}).catch((err: any) => {
+	// 					this.responserService = { result: 'Nop', message: 'No se pudo realizar la consulta', error: err, status: 500 }
+	// 					reject(this.responserService)
+	// 				});
+	// 		} else {
+	// 			this.responserService = { result: 'Nop', message: 'No se pudo realizar la consulta', error: 'Some /entities/util/getAll/return/if(model)', status: 500 }
+	// 			reject(this.responserService)
+	// 		}
+	// 	});
+	// }
 
 	public async getById(
 		id: string,

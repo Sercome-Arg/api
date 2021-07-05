@@ -189,11 +189,17 @@ export default class Controller implements Serviceable {
 
 		return new Promise<Responseable>( async (resolve, reject) => {
 
-			await this.geteableAllService.getAll(userModel, {}, match, {}, {}, 1, 0)
+			var project: any = {
+				_id: 1,
+				'rol.permission': 1,
+			}
+
+			await this.geteableAllService.getAll(userModel, project, match, {}, {}, 1, 0)
 				.then(async (result: Responseable) => {
+					console.log(result)
 					if(result) {
 						this.responserService = {
-							result: result.result?.rolRef?.permission || [],
+							result: result.result?.rol?.permission || [],
 							message: result.message,
 							error: result.error,
 							status: result.status
