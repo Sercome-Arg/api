@@ -234,26 +234,6 @@ export default class Controller implements Serviceable {
 				.then(async (res: Responseable) => {
 					if(res && res.result !== undefined) {
 
-						let permissions: any[] = []
-
-						if(res.result.rolRef !== undefined) {
-							if(res.result.rolRef.permission !== undefined && res.result.rolRef.permission.length > 0) {
-								permissions = res.result.rolRef.permission
-							}
-						}
-
-						// await Promise.all(
-						// 	permissions.map(async (permission: {
-						// 		permission: string
-						// 		perm: {}
-						// 	}) => {
-						// 		await this.geteableAllService.getAll(permissionModel, {}, { _id: { $oid: permission.permission } }, {}, {}, 1, 0)
-						// 			.then((sub: Responseable) => {
-						// 				permission.perm = sub.result
-						// 			})
-						// 	})
-						// )
-
 						this.responserService = {
 							result: res.result,
 							message: res.message,
